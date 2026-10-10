@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MoE Scripts, Explained</title>
+<title>MoE, Explained</title>
 <link rel="stylesheet" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
 <link rel="stylesheet" media="(prefers-color-scheme: dark)"
@@ -17,7 +17,7 @@
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme="light"]) {
       --bg: #141416; --panel: #1c1c1f; --ink: #ececef; --muted: #9a9aa2; --line: #2e2e33;
       --code-bg: #0f0f11; --accent: #ff7a45; --accent-soft: #3a2218;
       --dense: #9aa7b4; --e0: #6ea0ff; --e1: #4cc38a; --e2: #ff8a4c; --e3: #b197fc;
@@ -25,102 +25,115 @@
       color-scheme: dark;
     }
   }
+  :root[data-theme="dark"] {
+    --bg: #141416; --panel: #1c1c1f; --ink: #ececef; --muted: #9a9aa2; --line: #2e2e33;
+    --code-bg: #0f0f11; --accent: #ff7a45; --accent-soft: #3a2218;
+    --dense: #9aa7b4; --e0: #6ea0ff; --e1: #4cc38a; --e2: #ff8a4c; --e3: #b197fc;
+    --good: #4cc38a; --bad: #ff6b6b;
+    color-scheme: dark;
+  }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--ink);
          font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  .wrap { max-width: 1280px; margin: 0 auto; padding: 32px 20px 80px; }
-  header h1 { font-size: 30px; margin: 0 0 6px; letter-spacing: -0.02em; }
-  header p { color: var(--muted); margin: 0; max-width: 760px; }
-  nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 8px; }
-  nav a { font-size: 13px; color: var(--ink); text-decoration: none; padding: 4px 10px;
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 32px 16px 80px; }
+  header h1 { font-size: 30px; margin: 0 0 4px; letter-spacing: -0.02em; }
+  header p { color: var(--muted); margin: 0; }
+  nav { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0 0; align-items: center; }
+  nav b { font-size: 11px; letter-spacing: .08em; color: var(--accent); margin: 0 4px 0 8px; }
+  nav a { font-size: 12.5px; color: var(--ink); text-decoration: none; padding: 3px 9px;
           border: 1px solid var(--line); border-radius: 999px; background: var(--panel); }
   nav a:hover { border-color: var(--accent); color: var(--accent); }
 
-  section { margin-top: 44px; }
-  section > h2 { font-size: 21px; margin: 0 0 4px; letter-spacing: -0.01em; }
-  section > h2 .n { color: var(--accent); margin-right: 8px; font-variant-numeric: tabular-nums; }
-  section > .sub { color: var(--muted); margin: 0 0 16px; }
-  .row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+  h2.part { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent);
+            margin: 48px 0 0; padding-bottom: 6px; border-bottom: 2px solid var(--accent); }
+  .blk { margin-top: 28px; }
+  .blk > h3 { font-size: 17px; margin: 0 0 10px; display: flex; align-items: center; gap: 8px; }
+  .blk > h3 .q { flex: none; min-width: 28px; height: 24px; padding: 0 6px; border-radius: 6px; background: var(--accent);
+                 color: #fff; display: grid; place-items: center; font-size: 12px; }
+  .row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start; }
   @media (max-width: 900px) { .row { grid-template-columns: 1fr; } }
-
-  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
-  .card h3 { font-size: 15px; margin: 0 0 8px; }
-  .card p { margin: 0 0 10px; }
-  .card ul, .card ol { margin: 0 0 10px; padding-left: 20px; }
-  .card li { margin: 3px 0; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+  .card p { margin: 0 0 8px; }
   .muted { color: var(--muted); }
+  .cap { color: var(--muted); font-size: 13px; margin: 8px 0 0; }
+  .key { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 7px 12px;
+         border-radius: 0 8px 8px 0; font-size: 14px; margin-top: 10px; }
+  .not { font-size: 12px; color: var(--muted); border: 1px dashed var(--line); border-radius: 999px; padding: 1px 8px; margin-left: 6px; font-weight: 400; }
   code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.88em; }
   :not(pre) > code { background: var(--code-bg); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; }
+  pre.dia { margin: 0; padding: 12px 14px; background: var(--code-bg); border: 1px solid var(--line); border-radius: 10px;
+            font: 12.5px/1.55 ui-monospace, Menlo, monospace; overflow-x: auto; }
+  .math { font: 14.5px ui-monospace, Menlo, monospace; text-align: center; padding: 10px; background: var(--code-bg);
+          border: 1px solid var(--line); border-radius: 8px; margin: 0 0 10px; overflow-x: auto; }
+  .scroll { overflow-x: auto; }
 
-  .code { position: sticky; top: 12px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--code-bg); }
-  .code .file { font: 12px ui-monospace, Menlo, monospace; color: var(--muted); padding: 8px 14px;
+  .code { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--code-bg); }
+  .code + .code, .code + .key, .key + .code { margin-top: 12px; }
+  .code .file { font: 12px ui-monospace, Menlo, monospace; color: var(--muted); padding: 7px 14px;
                 border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 8px; }
   .code pre { margin: 0; overflow-x: auto; }
-  .code pre code.hljs, .code pre code { display: block; padding: 14px; font-size: 12.5px; line-height: 1.55; background: transparent; }
-  .code + .code { margin-top: 14px; position: static; }
+  .code pre code.hljs, .code pre code { display: block; padding: 12px 14px; font-size: 12.5px; line-height: 1.55; background: transparent; }
 
   svg text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; fill: var(--ink); }
   .viz { width: 100%; height: auto; display: block; }
 
-  /* interactive router demo */
-  .controls { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-bottom: 12px; }
-  .controls button { font: inherit; font-size: 13px; padding: 5px 12px; border-radius: 8px; cursor: pointer;
+  table.plain { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  table.plain th, table.plain td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.plain th { color: var(--muted); font-weight: 600; font-size: 12.5px; }
+
+  .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 10px; }
+  .controls button { font: inherit; font-size: 13px; padding: 4px 11px; border-radius: 8px; cursor: pointer;
                      border: 1px solid var(--line); background: var(--panel); color: var(--ink); }
   .controls button:hover { border-color: var(--accent); color: var(--accent); }
-  .controls label { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
-  .scroll { overflow-x: auto; }
-  table.heat { border-collapse: separate; border-spacing: 3px; font-size: 12.5px; font-variant-numeric: tabular-nums; }
-  table.heat th { font-weight: 600; padding: 2px 6px; text-align: center; }
-  table.heat th.tok { text-align: right; color: var(--muted); font-weight: 500; }
-  table.heat td { width: 62px; height: 30px; text-align: center; border-radius: 6px; position: relative; }
-  table.heat td.pick { outline: 2px solid var(--ink); outline-offset: -2px; font-weight: 700; }
-  table.heat td.w { width: auto; padding: 0 8px; color: var(--muted); text-align: left; white-space: nowrap; }
-  .buckets { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
-  @media (max-width: 560px) { .buckets { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  .bucket { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; font-size: 12.5px; min-height: 84px; }
-  .bucket b { display: block; margin-bottom: 4px; }
-  .chip { display: inline-block; padding: 1px 6px; margin: 2px 2px 0 0; border-radius: 999px; background: var(--code-bg); border: 1px solid var(--line); }
-  .stat { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 12px; font-size: 13px; }
-  .stat .big { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
-  .legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12.5px; color: var(--muted); margin-top: 8px; }
-  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
-
-  table.plain { border-collapse: collapse; width: 100%; font-size: 13.5px; }
-  table.plain th, table.plain td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  table.plain th { color: var(--muted); font-weight: 600; font-size: 12.5px; }
-  .callout { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 10px 14px; border-radius: 0 8px 8px 0; margin-top: 12px; font-size: 14px; }
-  .flow { display: flex; flex-direction: column; gap: 6px; }
-  .flow .st { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; }
-  .flow .st .k { width: 26px; height: 26px; border-radius: 50%; background: var(--code-bg); border: 1px solid var(--line);
-                 display: grid; place-items: center; font-size: 12px; font-weight: 700; }
-  .flow .st.moe .k { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .tag { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.04em; }
-
-  /* step-through section */
-  .qa { margin-top: 26px; }
-  .qa > h3 { font-size: 16px; margin: 0 0 10px; display: flex; align-items: center; gap: 8px; }
-  .qa > h3 .q { width: 24px; height: 24px; border-radius: 6px; background: var(--accent); color: #fff;
-                display: grid; place-items: center; font-size: 12px; flex: none; }
-  .code.static { position: static; }
+  .controls button.on { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 600; }
   .controls button:disabled { opacity: .4; cursor: default; color: var(--ink); border-color: var(--line); }
-  .cap { color: var(--muted); font-size: 13px; margin: 6px 0 0; }
-  .pipe { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
-  .pipe .ch { border: 1px solid var(--line); background: var(--code-bg); border-radius: 8px; padding: 3px 8px;
-              font: 12px ui-monospace, Menlo, monospace; }
-  .pipe .op { font-size: 11.5px; color: var(--muted); }
-  .dots { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 8px; }
-  @media (max-width: 560px) { .dots { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  .dots div { border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; font-size: 13px; text-align: center; }
-  .dots b { font-size: 16px; display: block; }
+  .controls label { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+
+  /* bars */
   .pbar { display: grid; grid-template-columns: 28px 1fr 64px; gap: 8px; align-items: center; font-size: 13px; margin: 4px 0; }
   .pbar .track { height: 14px; background: var(--code-bg); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
   .pbar .fill { height: 100%; }
   .pbar.pick .track { outline: 2px solid var(--ink); outline-offset: 1px; }
-  .pbar b { font-weight: 700; }
+  .pbar.off { opacity: .4; }
   .stack { display: flex; height: 24px; border-radius: 6px; overflow: hidden; font-size: 11.5px; font-weight: 700;
            color: #fff; border: 1px solid var(--line); background: var(--code-bg); }
-  .stack span { display: grid; place-items: center; white-space: nowrap; }
-  .stackrow { display: grid; grid-template-columns: 74px 1fr 64px; gap: 8px; align-items: center; font-size: 12.5px; margin: 6px 0; }
+  .stack span { display: grid; place-items: center; white-space: nowrap; overflow: hidden; }
+  .stackrow { display: grid; grid-template-columns: 74px 1fr 70px; gap: 8px; align-items: center; font-size: 12.5px; margin: 6px 0; }
+  .pipe { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .pipe .ch { border: 1px solid var(--line); background: var(--code-bg); border-radius: 8px; padding: 3px 8px; font: 12px ui-monospace, Menlo, monospace; }
+  .pipe .op { font-size: 11.5px; color: var(--muted); }
+  .stat { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 10px; font-size: 13px; }
+  .stat .big { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+  /* router demo */
+  table.heat { border-collapse: separate; border-spacing: 3px; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+  table.heat th { font-weight: 600; padding: 2px 6px; text-align: center; }
+  table.heat th.tok { text-align: right; color: var(--muted); font-weight: 500; }
+  table.heat td { width: 58px; height: 28px; text-align: center; border-radius: 6px; }
+  table.heat td.pick { outline: 2px solid var(--ink); outline-offset: -2px; font-weight: 700; }
+  table.heat td.w { width: auto; padding: 0 8px; color: var(--muted); text-align: left; white-space: nowrap; }
+  .buckets { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+  @media (max-width: 560px) { .buckets { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .bucket { border: 1px solid var(--line); border-radius: 10px; padding: 7px 9px; font-size: 12px; min-height: 70px; }
+  .bucket b { display: block; margin-bottom: 3px; }
+  .chip { display: inline-block; padding: 0 6px; margin: 2px 2px 0 0; border-radius: 999px; background: var(--code-bg); border: 1px solid var(--line); }
+
+  /* capacity */
+  .caprow { display: grid; grid-template-columns: 34px 1fr 74px; gap: 8px; align-items: center; margin: 5px 0; font-size: 12.5px; }
+  .slots { display: flex; gap: 3px; flex-wrap: wrap; position: relative; }
+  .slot { width: 18px; height: 18px; border-radius: 4px; display: grid; place-items: center; font-size: 10px; color: #fff; }
+  .slot.drop { background: transparent !important; border: 1.5px dashed var(--bad); color: var(--bad); }
+  .slot.capline { width: 2px; background: var(--ink); border-radius: 0; margin: -2px 2px; height: 22px; }
+
+  /* slices */
+  .sl { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 4px; font: 700 11px ui-monospace, Menlo, monospace;
+        color: #fff; margin-right: 2px; }
+  .sl.new { background: repeating-linear-gradient(45deg, var(--muted), var(--muted) 3px, transparent 3px, transparent 6px) !important;
+            color: var(--ink); border: 1px solid var(--muted); }
+  .slrow { display: grid; grid-template-columns: 92px 1fr; gap: 10px; align-items: center; margin: 6px 0; font-size: 13px; }
+  .slrow .ex { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  /* matrices + steppers */
   table.mat { border-collapse: separate; border-spacing: 2px; font: 12.5px ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; }
   table.mat td { min-width: 42px; padding: 4px 6px; text-align: center; background: var(--code-bg); border: 1px solid var(--line); border-radius: 5px; }
   table.mat td.on { background: color-mix(in srgb, var(--accent) 22%, var(--panel)); border-color: var(--accent); font-weight: 700; }
@@ -131,9 +144,9 @@
   pre.hl { margin: 0; background: var(--code-bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px;
            overflow-x: auto; font-size: 12.5px; line-height: 1.8; }
   pre.hl code { font-size: 12.5px; }
-  pre.hl span[data-k] { border-radius: 3px; padding: 1px 0; transition: background .15s; }
+  pre.hl span[data-k] { border-radius: 3px; padding: 1px 0; }
   pre.hl span.on { background: color-mix(in srgb, var(--accent) 28%, transparent); outline: 1px solid var(--accent); }
-  .steptitle { font-weight: 700; margin: 12px 0 0; }
+  .steptitle { font-weight: 700; margin: 0; }
   .stepnote { color: var(--muted); font-size: 13.5px; margin: 2px 0 0; }
   .eqs div { font: 13px ui-monospace, Menlo, monospace; padding: 6px 10px; border-radius: 8px; border: 1px solid transparent; color: var(--muted); }
   .eqs div.on { color: var(--ink); border-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
@@ -141,422 +154,131 @@
   table.lgrid { border-collapse: separate; border-spacing: 4px; font-size: 12.5px; font-variant-numeric: tabular-nums; }
   table.lgrid th { font-weight: 600; padding: 0 4px; }
   table.lgrid th.t { color: var(--muted); font-weight: 500; text-align: right; }
-  table.lgrid td { width: 58px; height: 34px; text-align: center; border-radius: 7px; border: 1px dashed var(--line); color: var(--line); }
+  table.lgrid td { width: 56px; height: 32px; text-align: center; border-radius: 7px; border: 1px dashed var(--line); color: var(--line); }
   table.lgrid td.pk { border: 1px solid var(--line); color: var(--ink); }
   table.lgrid td.done { opacity: .55; }
-  table.lgrid td.act { border: 2px solid var(--accent); font-weight: 700; opacity: 1;
-                       background: color-mix(in srgb, var(--accent) 22%, var(--panel)); }
+  table.lgrid td.act { border: 2px solid var(--accent); font-weight: 700; opacity: 1; background: color-mix(in srgb, var(--accent) 22%, var(--panel)); }
   .lv .now { font: 12.5px ui-monospace, Menlo, monospace; min-height: 40px; margin: 8px 0; padding: 8px 10px;
              border-radius: 8px; background: var(--code-bg); border: 1px solid var(--line); }
   .lv .outs div { font: 12.5px ui-monospace, Menlo, monospace; padding: 2px 0; }
   .lv .cnt b { font-size: 18px; color: var(--ink); }
-  .vs { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 10px; }
-  .vs .big { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12.5px; color: var(--muted); margin-top: 8px; }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+  img.res { width: 100%; border-radius: 10px; border: 1px solid var(--line); background: #fff; }
 </style>
 </head>
 <body>
 <div class="wrap">
 
 <header>
-  <h1>Session 14: the MoE scripts, explained</h1>
-  <p>The same ~20M GPT is trained twice with ZeRO-3: once <b>dense</b> and once with every feed-forward layer replaced by a <b>4-expert, top-2 Mixture-of-Experts</b>. Each section below shows the idea on the left and the code that does it on the right.</p>
+  <h1>Session 14: Mixture-of-Experts</h1>
+  <p>Theory → loss functions → our code. Code examples use one running case: 4 tokens, 4 experts, top-2.</p>
   <nav>
-    <a href="#logic" style="border-color:var(--accent);color:var(--accent);font-weight:600">★ The logic</a>
-    <a href="#walk" style="border-color:var(--accent);color:var(--accent);font-weight:600">◆ Step-through</a>
-    <a href="#s1">1 · Dense vs MoE block</a>
-    <a href="#s2">2 · Router, live</a>
-    <a href="#s3">3 · MoE.forward, line by line</a>
-    <a href="#s3b">4 · Worked example</a>
-    <a href="#s4">5 · Load-balancing loss</a>
-    <a href="#s5">6 · Parameters: total vs active</a>
-    <a href="#s6">7 · zero3_launch → moe_launch</a>
-    <a href="#s7">8 · One training step</a>
-    <a href="#s8">9 · Reading the logs</a>
+    <b>THEORY</b><a href="#t1">Dense → MoE</a><a href="#t2">Router</a><a href="#t3">Collapse</a><a href="#t4">Capacity</a><a href="#t5">Small experts</a><a href="#t6">Upcycling</a><a href="#t7">Expert parallel</a>
+    <b>LOSSES</b><a href="#l1">Cross-entropy</a><a href="#l2">Aux loss</a><a href="#l3">z-loss</a><a href="#l4">Bias trick</a><a href="#l5">Our total</a>
+    <b>CODE</b><a href="#c1">Model</a><a href="#c2">Router</a><a href="#c3">Two loops</a><a href="#c4">out[0]</a><a href="#c5">index_add_</a><a href="#c6">Aux</a><a href="#c7">Params</a><a href="#c8">Launcher</a><a href="#c9">Results</a>
   </nav>
 </header>
 
-<!-- THE LOGIC ─────────────────────────────────────── -->
-<section id="logic">
-  <h2><span class="n">★</span>The logic, in plain words</h2>
-  <p class="sub">Read this first. The numbered sections below go into the detail of each step.</p>
+<!-- ═══════════════════════════ THEORY ═══════════════════════════ -->
+<h2 class="part">Part 1 · Theory</h2>
+
+<!-- T1 -->
+<div class="blk" id="t1">
+  <h3><span class="q">T1</span>One FFN → many experts</h3>
   <div class="row">
     <div class="card">
-      <h3>The idea</h3>
-      <p>A dense block sends <b>every token through the same</b> feed-forward layer. An MoE block has <b>4 feed-forward layers (experts)</b> and a tiny <b>router</b>. For each token, the router picks the 2 experts that suit it best and blends their outputs. Different tokens use different experts, so each expert can specialise.</p>
-
-      <h3 style="margin-top:14px">What <code>MoE.forward</code> does, in 5 steps</h3>
-      <div class="flow">
-        <div class="st"><div class="k">1</div><div><b>Score.</b> The router (<code>Linear 384→4</code> + softmax) gives each token a probability for each expert.<br><span class="muted">"cat" → E0 0.50 · E1 0.10 · E2 0.30 · E3 0.10</span></div></div>
-        <div class="st"><div class="k">2</div><div><b>Pick.</b> <code>topk(2)</code> keeps the 2 best experts per token.<br><span class="muted">"cat" → E0 and E2</span></div></div>
-        <div class="st"><div class="k">3</div><div><b>Rescale.</b> Divide the 2 probabilities by their sum so they add up to 1.<br><span class="muted">0.50, 0.30 → 0.625, 0.375</span></div></div>
-        <div class="st"><div class="k">4</div><div><b>Run and blend.</b> Loop over the 4 experts. Each one <i>gathers</i> every token that picked it, runs once on that batch, and <i>adds</i> weight × output back into those tokens' rows.<br><span class="muted">out["cat"] = 0.625·E0("cat") + 0.375·E2("cat")</span></div></div>
-        <div class="st"><div class="k">5</div><div><b>Measure balance.</b> Count each expert's share of the picks (<code>f</code>) and its average router probability (<code>P</code>). Then <code>aux = 4·Σ f·P</code>, which is 1.0 when perfectly even and higher when one expert hogs the tokens.</div></div>
-      </div>
-      <p style="margin-top:10px">The block then does <code>x = x + out</code>, the same residual add as the dense model.</p>
-    </div>
-    <div class="card">
-      <h3>How it learns</h3>
-      <ul>
-        <li><b>Experts</b> learn like any FFN, but each one only gets gradients from the tokens routed to it. That's what makes them specialise.</li>
-        <li><b>The router</b> can't learn from the <i>choice</i> itself, since <code>topk</code> returns an index and has no gradient. It learns through the <i>blend weights</i> from step 3, which come from its probabilities. The loss tells it "a bit more E0 would have helped this token", so E0's score for similar tokens goes up.</li>
-      </ul>
-      <h3 style="margin-top:14px">Why the balancing loss exists</h3>
-      <p>That learning reinforces itself: an expert that's slightly better gets more tokens, which makes it better still, which gets it more tokens. Left alone, one expert takes everything and the others die. Adding <code>0.01 × aux</code> to the loss pushes the router's probability <b>away from busy experts and toward idle ones</b>, which keeps all 4 in use.</p>
-      <h3 style="margin-top:14px">What the training script adds</h3>
-      <p><code>moe_launch.py</code> is the dense launcher with 3 real changes:</p>
-      <ol>
-        <li>build <code>MoEGPT</code> instead of <code>GPT</code></li>
-        <li>shard each <code>MoEBlock</code> with ZeRO-3 instead of each <code>Block</code></li>
-        <li>backward on <code>loss + 0.01 × aux</code> instead of <code>loss</code></li>
-      </ol>
-      <p>Everything else (data, batch, steps, LR, seed) is the same, so the dense vs MoE loss curves differ only because of the architecture.</p>
-      <div class="callout">Want it with numbers? <a href="#s3b" style="color:var(--accent)">Section 4</a> traces 4 tokens through every step by hand, and <a href="#s2" style="color:var(--accent)">section 2</a> lets you play with the router.</div>
-    </div>
-  </div>
-</section>
-
-<!-- STEP-THROUGH ──────────────────────────────────── -->
-<section id="walk">
-  <h2><span class="n">◆</span>Step-through: the routing code, piece by piece</h2>
-  <p class="sub">One running example: 4 tokens, 4 experts, top-2. Vectors use D = 2 so the numbers fit.</p>
-
-  <!-- A -->
-  <div class="qa">
-    <h3><span class="q">A</span>Where's the 4× in MoE?</h3>
-    <div class="row">
-      <div class="card">
-        <svg class="viz" viewBox="0 0 560 232" role="img" aria-label="Dense block has one D to 4D to D FFN; MoE block has four identical copies and a router that picks two">
-          <defs>
-            <g id="ffn">
-              <rect x="0" y="-6" width="14" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
-              <line x1="14" y1="0" x2="40" y2="0" stroke="currentColor" stroke-width="1.2" vector-effect="non-scaling-stroke"/>
-              <rect x="40" y="-24" width="14" height="48" rx="2" fill="currentColor" fill-opacity=".18" stroke="currentColor" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
-              <line x1="54" y1="0" x2="80" y2="0" stroke="currentColor" stroke-width="1.2" vector-effect="non-scaling-stroke"/>
-              <rect x="80" y="-6" width="14" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
-            </g>
-          </defs>
-          <!-- dense -->
-          <text x="133" y="22" text-anchor="middle" font-size="14" font-weight="700">Dense block</text>
-          <text x="133" y="40" text-anchor="middle" font-size="11" style="fill:var(--muted)">every token → this one FFN</text>
-          <use href="#ffn" transform="translate(30,115) scale(2.2)" style="color:var(--dense)"/>
-          <text x="89" y="104" text-anchor="middle" font-size="11" style="fill:var(--muted)">gate, up</text>
-          <text x="177" y="104" text-anchor="middle" font-size="11" style="fill:var(--muted)">bottom</text>
-          <text x="45" y="192" text-anchor="middle" font-size="11">D=384</text>
-          <text x="133" y="192" text-anchor="middle" font-size="11" font-weight="700">4D=1536</text>
-          <text x="221" y="192" text-anchor="middle" font-size="11">D=384</text>
-          <text x="133" y="216" text-anchor="middle" font-size="12" style="fill:var(--muted)">expand 4×, then project back</text>
-
-          <line x1="262" y1="14" x2="262" y2="222" stroke="var(--line)" stroke-dasharray="4 4"/>
-
-          <!-- moe -->
-          <text x="415" y="22" text-anchor="middle" font-size="14" font-weight="700">MoE block</text>
-          <text x="415" y="40" text-anchor="middle" font-size="11" style="fill:var(--muted)">4 copies of the same FFN · each token uses 2</text>
-          <rect x="280" y="124" width="64" height="24" rx="12" fill="var(--accent-soft)" stroke="var(--accent)"/>
-          <text x="312" y="140" text-anchor="middle" font-size="12" font-weight="700" style="fill:var(--accent)">router</text>
-          <line x1="344" y1="136" x2="396" y2="76" stroke="var(--e0)" stroke-width="2"/>
-          <line x1="344" y1="136" x2="396" y2="119" stroke="var(--line)" stroke-dasharray="3 3"/>
-          <line x1="344" y1="136" x2="396" y2="162" stroke="var(--e2)" stroke-width="2"/>
-          <line x1="344" y1="136" x2="396" y2="205" stroke="var(--line)" stroke-dasharray="3 3"/>
-          <use href="#ffn" transform="translate(400,76) scale(0.8)" style="color:var(--e0)"/>
-          <use href="#ffn" transform="translate(400,119) scale(0.8)" style="color:var(--e1)" opacity=".4"/>
-          <use href="#ffn" transform="translate(400,162) scale(0.8)" style="color:var(--e2)"/>
-          <use href="#ffn" transform="translate(400,205) scale(0.8)" style="color:var(--e3)" opacity=".4"/>
-          <g font-size="12" font-weight="700">
-            <text x="484" y="80" style="fill:var(--e0)">E0 ✓ 0.65</text>
-            <text x="484" y="123" style="fill:var(--e1)" opacity=".55">E1</text>
-            <text x="484" y="166" style="fill:var(--e2)">E2 ✓ 0.35</text>
-            <text x="484" y="209" style="fill:var(--e3)" opacity=".55">E3</text>
-          </g>
-        </svg>
-        <table class="plain" style="margin-top:8px">
-          <tr><th></th><th>Dense</th><th>MoE (E=4, k=2)</th></tr>
-          <tr><td>FFN shape</td><td>D → 4D → D</td><td>D → 4D → D <span class="muted">(each expert)</span></td></tr>
-          <tr><td>FFNs per block</td><td>1</td><td>4</td></tr>
-          <tr><td>FFNs a token uses</td><td>1</td><td>2</td></tr>
-          <tr><td>FFN params</td><td>1×</td><td>4×</td></tr>
-          <tr><td>FFN compute / token</td><td>1×</td><td>2×</td></tr>
-        </table>
-      </div>
-      <div>
-        <div class="code static"><div class="file"><span>the expert = the dense SwiGLU</span><span>3 files</span></div>
-<pre><code class="language-python"># transformer.py
-class SwiGLU(nn.Module):
-    def __init__(self, c):
-        super().__init__()
-        self.gate = nn.Linear(c.D, c.DFF, bias=False)    # D  → 4D
-        self.up = nn.Linear(c.D, c.DFF, bias=False)      # D  → 4D
-        self.bottom = nn.Linear(c.DFF, c.D, bias=False)  # 4D → D
-
-# moe_launch.py
-cfg.HD, cfg.DFF = cfg.D // cfg.H, cfg.D * 4             # DFF = 4D
-
-# moe_pipeline.py · MoE.__init__
-self.experts = nn.ModuleList([SwiGLU(c) for _ in range(E)])   # 4 of them</code></pre></div>
-        <div class="callout">Dense is the <b>1-expert</b> case with no router. The 4 experts start from <b>different random weights</b>. They aren't copies of each other, and they specialise because each one trains on different tokens.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- B -->
-  <div class="qa">
-    <h3><span class="q">B</span>Router: flatten, score, softmax</h3>
-    <div class="row">
-      <div class="card">
-        <div class="pipe">
-          <span class="ch">x (64, 256, 384)</span><span class="op">reshape →</span>
-          <span class="ch">xf (16384, 384)</span><span class="op">router →</span>
-          <span class="ch">logits (16384, 4)</span><span class="op">softmax →</span>
-          <span class="ch">probs (16384, 4)</span>
-        </div>
-        <p class="cap">Flatten: the router decides per token, so batch and position don't matter. Every token becomes one row.</p>
-
-        <p class="steptitle">One token, h = row 0 of xf</p>
-        <div class="dots">
-          <div><code>h · w0</code><b style="color:var(--e0)">2.1</b></div>
-          <div><code>h · w1</code><b style="color:var(--e1)">−0.3</b></div>
-          <div><code>h · w2</code><b style="color:var(--e2)">1.5</b></div>
-          <div><code>h · w3</code><b style="color:var(--e3)">0.7</b></div>
-        </div>
-        <p class="cap"><code>router.weight</code> is (4, 384): one learned vector per expert. Score = how well the token lines up with it.</p>
-
-        <p class="steptitle">softmax → probabilities that add up to 1</p>
-        <div class="pbar"><b style="color:var(--e0)">E0</b><div class="track"><div class="fill" style="width:53%;background:var(--e0)"></div></div><span>0.53</span></div>
-        <div class="pbar"><b style="color:var(--e1)">E1</b><div class="track"><div class="fill" style="width:5%;background:var(--e1)"></div></div><span>0.05</span></div>
-        <div class="pbar"><b style="color:var(--e2)">E2</b><div class="track"><div class="fill" style="width:29%;background:var(--e2)"></div></div><span>0.29</span></div>
-        <div class="pbar"><b style="color:var(--e3)">E3</b><div class="track"><div class="fill" style="width:13%;background:var(--e3)"></div></div><span>0.13</span></div>
-      </div>
-      <div>
-        <div class="code static"><div class="file"><span>moe_pipeline.py · MoE.forward</span><span>L35–37</span></div>
-<pre><code class="language-python">xf = x.reshape(-1, D)                         # (N,D), N=B*T
-# router in fp32 -> probabilities over experts
-probs = self.router(xf).float().softmax(-1)   # (N,E)
-
-# self.router = nn.Linear(D, E, bias=False)
-#   (N, D) @ (D, E) -> (N, E): a score per token per expert</code></pre></div>
-        <div class="callout"><b><code>.float()</code></b> casts to fp32 before softmax, so bf16 rounding can't flip which experts win. This run has no autocast and is already fp32, so it's a safeguard for later.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- C -->
-  <div class="qa">
-    <h3><span class="q">C</span>Keep the top 2, rescale them to 1</h3>
-    <div class="row">
-      <div class="card">
-        <div class="pbar pick"><b style="color:var(--e0)">E0</b><div class="track"><div class="fill" style="width:53%;background:var(--e0)"></div></div><span><b>0.53 ✓</b></span></div>
-        <div class="pbar" style="opacity:.4"><b style="color:var(--e1)">E1</b><div class="track"><div class="fill" style="width:5%;background:var(--e1)"></div></div><span>0.05</span></div>
-        <div class="pbar pick"><b style="color:var(--e2)">E2</b><div class="track"><div class="fill" style="width:29%;background:var(--e2)"></div></div><span><b>0.29 ✓</b></span></div>
-        <div class="pbar" style="opacity:.4"><b style="color:var(--e3)">E3</b><div class="track"><div class="fill" style="width:13%;background:var(--e3)"></div></div><span>0.13</span></div>
-
-        <div class="stackrow" style="margin-top:14px"><span class="muted">top-2</span>
-          <div class="stack"><span style="width:53%;background:var(--e0)">0.53</span><span style="width:29%;background:var(--e2)">0.29</span></div>
-          <span>sum 0.82</span></div>
-        <div class="stackrow"><span class="muted">÷ 0.82</span>
-          <div class="stack"><span style="width:65%;background:var(--e0)">0.65</span><span style="width:35%;background:var(--e2)">0.35</span></div>
-          <span><b>sum 1.00</b></span></div>
-        <p class="cap">Rescaled, the output is a weighted <i>average</i> of 2 experts, on the same scale however confident the router was.</p>
-
-        <p class="steptitle">The running example (all 4 tokens)</p>
-        <div class="scroll"><table class="plain">
-          <tr><th>token</th><th>probs (E0, E1, E2, E3)</th><th>topi</th><th>topw</th></tr>
-          <tr><td>t0</td><td><b>0.53</b>, 0.05, <b>0.29</b>, 0.13</td><td>[0, 2]</td><td>[0.65, 0.35]</td></tr>
-          <tr><td>t1</td><td>0.03, <b>0.15</b>, 0.08, <b>0.74</b></td><td>[3, 1]</td><td>[0.83, 0.17]</td></tr>
-          <tr><td>t2</td><td>0.10, <b>0.60</b>, <b>0.25</b>, 0.05</td><td>[1, 2]</td><td>[0.71, 0.29]</td></tr>
-          <tr><td>t3</td><td><b>0.40</b>, 0.10, 0.05, <b>0.45</b></td><td>[3, 0]</td><td>[0.53, 0.47]</td></tr>
-        </table></div>
-        <p class="cap">Column 0 of <code>topi</code>/<code>topw</code> = 1st choice, column 1 = 2nd choice. These columns are the <b>slots</b>.</p>
-      </div>
-      <div>
-        <div class="code static"><div class="file"><span>moe_pipeline.py · MoE.forward</span><span>L38–39</span></div>
-<pre><code class="language-python">topw, topi = probs.topk(self.k, dim=-1)       # (N,k) each
-topw = topw / topw.sum(-1, keepdim=True)      # renormalise -> sums to 1</code></pre></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- D -->
-  <div class="qa">
-    <h3><span class="q">D</span>Same sum, two ways to loop</h3>
-    <div class="row">
-      <div>
-        <div class="code static"><div class="file"><span>easy to read: loop over tokens</span><span>slow</span></div>
-<pre><code class="language-python">out = torch.zeros_like(xf)
-for i in range(N):                    # each token
-    for j in range(k):                # its 2 choices
-        e = topi[i, j]
-        w = topw[i, j]
-        out[i] += w * experts[e](xf[i])</code></pre></div>
-        <div class="card lv" id="lvTok" style="margin-top:12px"></div>
-        <div class="vs"><div><div class="muted">real run: expert calls</div><div class="big">32,768</div></div><div><div class="muted">tokens per call</div><div class="big">1</div></div></div>
-      </div>
-      <div>
-        <div class="code static"><div class="file"><span>the real code: loop over experts</span><span>fast</span></div>
-<pre><code class="language-python">out = torch.zeros_like(xf)
-for e, expert in enumerate(self.experts):
-    tok, slot = (topi == e).nonzero(as_tuple=True)
-    y = expert(xf[tok])
-    out.index_add_(0, tok, y * topw[tok, slot, None])
-
-</code></pre></div>
-        <div class="card lv" id="lvExp" style="margin-top:12px"></div>
-        <div class="vs"><div><div class="muted">real run: expert calls</div><div class="big">4</div></div><div><div class="muted">tokens per call</div><div class="big">~8,192</div></div></div>
-      </div>
-    </div>
-    <div class="callout">Click <b>Next call</b> on both. The token loop walks the grid <b>row by row</b>: 8 calls, 1 token each. The expert loop takes a whole <b>column</b> at once: 4 calls, 2 tokens each. Both end with <b>exactly the same <code>out</code></b>, the way a doctor can see their whole patient list in one session instead of patients wandering room to room. The "real run" figures are for N = 16,384 tokens × k = 2.</div>
-  </div>
-
-  <!-- E -->
-  <div class="qa">
-    <h3><span class="q">E</span>Building <code>out[0]</code>, one expert at a time</h3>
-    <div class="row">
-      <div class="card">
-        <div class="controls">
-          <button id="accPrev">◀ Back</button><button id="accNext">Next ▶</button>
-          <span id="accStep" class="muted" style="font-size:13px"></span>
-        </div>
-        <svg id="accSvg" class="viz" viewBox="0 0 360 250" role="img" aria-label="2D plot: out[0] built as 0.65 times expert 0's answer plus 0.35 times expert 2's answer"></svg>
-      </div>
-      <div class="card">
-        <p class="muted" style="margin-top:0">Token 0 picked E0 (0.65) and E2 (0.35). Pretend the experts answer:</p>
-        <div class="pipe" style="margin-bottom:12px">
-          <span class="ch" style="color:var(--e0)">E0(x0) = [10, 20]</span>
-          <span class="ch" style="color:var(--e2)">E2(x0) = [−4, 8]</span>
-        </div>
-        <div class="eqs" id="accEqs">
-          <div>out[0] = [0, 0]</div>
-          <div>out[0] += 0.65 × [10, 20] = [6.5, 13.0]</div>
-          <div>out[0] += 0.35 × [−4, 8]&nbsp; → [5.1, 15.8]</div>
-          <div class="bad">out[0] &nbsp;= 0.35 × [−4, 8]&nbsp; → [−1.4, 2.8] ✗</div>
-        </div>
-        <p class="stepnote" id="accNote"></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- F -->
-  <div class="qa">
-    <h3><span class="q">F</span>The <code>index_add_</code> line, piece by piece <span class="muted" style="font-weight:400;font-size:13px">(expert 0)</span></h3>
-    <div class="row">
-      <div class="card">
-        <div class="controls">
-          <button id="ixPrev">◀ Back</button><button id="ixNext">Next ▶</button>
-          <span id="ixStep" class="muted" style="font-size:13px"></span>
-        </div>
-        <p class="steptitle" id="ixTitle" style="margin-top:0"></p>
-        <div class="scroll"><div class="stage" id="ixStage"></div></div>
-        <p class="stepnote" id="ixNote"></p>
-      </div>
-      <div>
-<pre class="hl"><code class="nohighlight"><span data-k="all">for e, expert in enumerate(self.experts):</span>
-    <span data-k="nz">tok, slot = (topi == e).nonzero(as_tuple=True)</span>
-    <span data-k="run">y = expert(xf[tok])</span>
-    <span data-k="add">out.index_add_(0, tok, </span><span data-k="mul">y * </span><span data-k="w">topw[tok, slot</span><span data-k="none">, None]</span><span data-k="dt">.to(y.dtype)</span><span data-k="add">)</span></code></pre>
-        <div class="callout"><b>index_add_(0, tok, src)</b> = <code>for i: out[tok[i]] += src[i]</code>. It <b>adds</b>, so the second expert's share lands on top of the first's.</div>
-        <div class="callout"><b>Expert with 0 tokens?</b> <code>tok</code> is empty and the expert still runs on a (0, D) tensor. It gets a zero gradient instead of none, which keeps FSDP's GPUs in sync.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 1 ─────────────────────────────────────────────── -->
-<section id="s1">
-  <h2><span class="n">1</span>Only the feed-forward layer changes</h2>
-  <p class="sub">Attention, norms, embeddings and the output head are the same classes in both models.</p>
-  <div class="row">
-    <div class="card">
-      <svg class="viz" viewBox="0 0 560 360" role="img" aria-label="Dense block with one FFN vs MoE block with router and four experts">
+      <svg class="viz" viewBox="0 0 560 232" role="img" aria-label="Dense block with one FFN vs MoE block with router and four experts">
         <defs>
-          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-            <path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker>
+          <g id="ffn">
+            <rect x="0" y="-6" width="14" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+            <line x1="14" y1="0" x2="40" y2="0" stroke="currentColor" stroke-width="1.2" vector-effect="non-scaling-stroke"/>
+            <rect x="40" y="-24" width="14" height="48" rx="2" fill="currentColor" fill-opacity=".18" stroke="currentColor" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+            <line x1="54" y1="0" x2="80" y2="0" stroke="currentColor" stroke-width="1.2" vector-effect="non-scaling-stroke"/>
+            <rect x="80" y="-6" width="14" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+          </g>
         </defs>
-        <!-- dense -->
-        <text x="120" y="22" text-anchor="middle" font-weight="700" font-size="14">Dense Block</text>
-        <text x="120" y="38" text-anchor="middle" font-size="11" fill="var(--muted)" style="fill:var(--muted)">transformer.py</text>
-        <rect x="45" y="56" width="150" height="34" rx="8" fill="var(--panel)" stroke="var(--line)"/>
-        <text x="120" y="78" text-anchor="middle" font-size="13">RMSNorm → Attention</text>
-        <line x1="120" y1="90" x2="120" y2="120" stroke="var(--muted)" marker-end="url(#ar)"/>
-        <rect x="45" y="122" width="150" height="34" rx="8" fill="var(--panel)" stroke="var(--line)"/>
-        <text x="120" y="144" text-anchor="middle" font-size="13">RMSNorm</text>
-        <line x1="120" y1="156" x2="120" y2="196" stroke="var(--muted)" marker-end="url(#ar)"/>
-        <rect x="45" y="198" width="150" height="58" rx="8" fill="none" stroke="var(--dense)" stroke-width="2"/>
-        <text x="120" y="222" text-anchor="middle" font-size="13" font-weight="700">SwiGLU FFN</text>
-        <text x="120" y="241" text-anchor="middle" font-size="11" style="fill:var(--muted)">384 → 1536 → 384</text>
-        <line x1="120" y1="256" x2="120" y2="296" stroke="var(--muted)" marker-end="url(#ar)"/>
-        <text x="120" y="314" text-anchor="middle" font-size="12" style="fill:var(--muted)">every token → same FFN</text>
-
-        <line x1="250" y1="20" x2="250" y2="340" stroke="var(--line)" stroke-dasharray="4 4"/>
-
-        <!-- moe -->
-        <text x="405" y="22" text-anchor="middle" font-weight="700" font-size="14">MoE Block</text>
-        <text x="405" y="38" text-anchor="middle" font-size="11" style="fill:var(--muted)">moe_pipeline.py</text>
-        <rect x="330" y="56" width="150" height="34" rx="8" fill="var(--panel)" stroke="var(--line)"/>
-        <text x="405" y="78" text-anchor="middle" font-size="13">RMSNorm → Attention</text>
-        <line x1="405" y1="90" x2="405" y2="120" stroke="var(--muted)" marker-end="url(#ar)"/>
-        <rect x="330" y="122" width="150" height="34" rx="8" fill="var(--panel)" stroke="var(--line)"/>
-        <text x="405" y="144" text-anchor="middle" font-size="13">RMSNorm</text>
-        <line x1="405" y1="156" x2="405" y2="172" stroke="var(--muted)" marker-end="url(#ar)"/>
-        <rect x="350" y="174" width="110" height="28" rx="14" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/>
-        <text x="405" y="193" text-anchor="middle" font-size="12.5" font-weight="700" style="fill:var(--accent)">router: top-2 of 4</text>
-        <!-- experts -->
+        <text x="133" y="22" text-anchor="middle" font-size="14" font-weight="700">Dense</text>
+        <text x="133" y="40" text-anchor="middle" font-size="11" style="fill:var(--muted)">every token → this one FFN</text>
+        <use href="#ffn" transform="translate(30,115) scale(2.2)" style="color:var(--dense)"/>
+        <text x="89" y="104" text-anchor="middle" font-size="11" style="fill:var(--muted)">gate, up</text>
+        <text x="177" y="104" text-anchor="middle" font-size="11" style="fill:var(--muted)">down</text>
+        <text x="45" y="192" text-anchor="middle" font-size="11">D</text>
+        <text x="133" y="192" text-anchor="middle" font-size="11" font-weight="700">4D</text>
+        <text x="221" y="192" text-anchor="middle" font-size="11">D</text>
+        <line x1="262" y1="14" x2="262" y2="222" stroke="var(--line)" stroke-dasharray="4 4"/>
+        <text x="415" y="22" text-anchor="middle" font-size="14" font-weight="700">MoE</text>
+        <text x="415" y="40" text-anchor="middle" font-size="11" style="fill:var(--muted)">E FFNs (experts) · each token uses k</text>
+        <rect x="280" y="124" width="64" height="24" rx="12" fill="var(--accent-soft)" stroke="var(--accent)"/>
+        <text x="312" y="140" text-anchor="middle" font-size="12" font-weight="700" style="fill:var(--accent)">router</text>
+        <line x1="344" y1="136" x2="396" y2="76" stroke="var(--e0)" stroke-width="2"/>
+        <line x1="344" y1="136" x2="396" y2="119" stroke="var(--line)" stroke-dasharray="3 3"/>
+        <line x1="344" y1="136" x2="396" y2="162" stroke="var(--e2)" stroke-width="2"/>
+        <line x1="344" y1="136" x2="396" y2="205" stroke="var(--line)" stroke-dasharray="3 3"/>
+        <use href="#ffn" transform="translate(400,76) scale(0.8)" style="color:var(--e0)"/>
+        <use href="#ffn" transform="translate(400,119) scale(0.8)" style="color:var(--e1)" opacity=".4"/>
+        <use href="#ffn" transform="translate(400,162) scale(0.8)" style="color:var(--e2)"/>
+        <use href="#ffn" transform="translate(400,205) scale(0.8)" style="color:var(--e3)" opacity=".4"/>
         <g font-size="12" font-weight="700">
-          <line x1="380" y1="202" x2="300" y2="236" stroke="var(--e0)" stroke-width="2" marker-end="url(#ar)"/>
-          <line x1="395" y1="202" x2="370" y2="236" stroke="var(--line)" stroke-dasharray="3 3"/>
-          <line x1="415" y1="202" x2="440" y2="236" stroke="var(--e2)" stroke-width="2" marker-end="url(#ar)"/>
-          <line x1="430" y1="202" x2="510" y2="236" stroke="var(--line)" stroke-dasharray="3 3"/>
-          <rect x="268" y="238" width="62" height="40" rx="7" fill="none" stroke="var(--e0)" stroke-width="2"/>
-          <text x="299" y="263" text-anchor="middle" style="fill:var(--e0)">E0</text>
-          <rect x="339" y="238" width="62" height="40" rx="7" fill="none" stroke="var(--e1)" stroke-width="1" opacity=".45"/>
-          <text x="370" y="263" text-anchor="middle" style="fill:var(--e1)" opacity=".55">E1</text>
-          <rect x="410" y="238" width="62" height="40" rx="7" fill="none" stroke="var(--e2)" stroke-width="2"/>
-          <text x="441" y="263" text-anchor="middle" style="fill:var(--e2)">E2</text>
-          <rect x="481" y="238" width="62" height="40" rx="7" fill="none" stroke="var(--e3)" stroke-width="1" opacity=".45"/>
-          <text x="512" y="263" text-anchor="middle" style="fill:var(--e3)" opacity=".55">E3</text>
+          <text x="484" y="80" style="fill:var(--e0)">E0 ✓ 0.65</text>
+          <text x="484" y="123" style="fill:var(--e1)" opacity=".55">E1</text>
+          <text x="484" y="166" style="fill:var(--e2)">E2 ✓ 0.35</text>
+          <text x="484" y="209" style="fill:var(--e3)" opacity=".55">E3</text>
         </g>
-        <line x1="299" y1="278" x2="395" y2="300" stroke="var(--e0)" marker-end="url(#ar)"/>
-        <line x1="441" y1="278" x2="415" y2="300" stroke="var(--e2)" marker-end="url(#ar)"/>
-        <circle cx="405" cy="308" r="9" fill="var(--panel)" stroke="var(--ink)"/>
-        <text x="405" y="312.5" text-anchor="middle" font-size="13">+</text>
-        <text x="405" y="338" text-anchor="middle" font-size="12" style="fill:var(--muted)">0.62·E0(x) + 0.38·E2(x)</text>
       </svg>
-      <p>Each of the 4 experts is a full <code>SwiGLU</code>, the same class the dense model uses. The router looks at each token, picks its 2 best experts, and mixes their outputs with weights that add up to 1.</p>
-      <p class="muted">The dashed experts aren't used by <i>this</i> token. Other tokens in the batch can pick them, so every expert does some work on every step.</p>
+      <div class="math" style="margin:8px 0 0">y = Σ<sub>i ∈ top-k</sub> g<sub>i</sub> · E<sub>i</sub>(x) &nbsp;&nbsp;=&nbsp;&nbsp; 0.65·E0(x) + 0.35·E2(x)</div>
     </div>
-    <div>
-      <div class="code"><div class="file"><span>transformer.py · Block</span><span>dense</span></div>
-<pre><code class="language-python">class Block(nn.Module):
-    def __init__(self, c):
-        super().__init__()
-        self.c = c
-        self.attn = Attention(c)
-        self.n1 = RMSNorm(c.D)
-        self.n2 = RMSNorm(c.D)
-        self.ffn = SwiGLU(c)            # ← 1 FFN
-    def forward(self,x,mask):
-        x = x + self.attn(self.n1(x), mask)
-        x = x + self.ffn(self.n2(x))
-        return x</code></pre></div>
-      <div class="code"><div class="file"><span>moe_pipeline.py · MoEBlock</span><span>MoE</span></div>
-<pre><code class="language-python">class MoEBlock(nn.Module):
-    def __init__(self, c, E=4, k=2):
-        super().__init__()
-        self.c = c
-        self.attn = Attention(c)
-        self.n1 = RMSNorm(c.D)
-        self.n2 = RMSNorm(c.D)
-        self.ffn = MoE(c, E, k)         # ← the ONLY change
-
-    def forward(self, x, mask):
-        x = x + self.attn(self.n1(x), mask)
-        x = x + self.ffn(self.n2(x))
-        return x</code></pre></div>
+    <div class="card">
+      <table class="plain">
+        <tr><th></th><th>stored (total)</th><th>used per token (active)</th></tr>
+        <tr><td>Qwen3-30B-A3B · 128 experts, top-8</td><td><b>30.5B</b></td><td><b>3.3B</b></td></tr>
+        <tr><td>Our MoE · 4 experts, top-2</td><td>56.9M</td><td>32.1M</td></tr>
+        <tr><td>Our dense</td><td>19.7M</td><td>19.7M</td></tr>
+      </table>
+      <div class="stat">
+        <div><div class="muted">memory follows</div><div class="big">total</div></div>
+        <div><div class="muted">compute follows</div><div class="big">active</div></div>
+      </div>
+      <div class="key">Store many FFNs, run only the few the router picks. Attention, norms and embeddings stay unchanged.</div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- 2 ─────────────────────────────────────────────── -->
-<section id="s2">
-  <h2><span class="n">2</span>The router, live</h2>
-  <p class="sub">A toy run of <code>MoE.forward</code> with 8 tokens and 4 experts. Press <b>New router</b> for different scores, or slide <b>Collapse</b> to bias every token towards E0 and watch the balancing loss rise.</p>
+<!-- T2 -->
+<div class="blk" id="t2">
+  <h3><span class="q">T2</span>Router: score → top-k → rescale</h3>
+  <div class="row">
+    <div class="card">
+      <div class="pipe">
+        <span class="ch">token (D)</span><span class="op">× router (D × E) →</span>
+        <span class="ch">E logits</span><span class="op">softmax →</span>
+        <span class="ch">E probs</span><span class="op">top-k → ÷ sum →</span>
+        <span class="ch">k weights, sum 1</span>
+      </div>
+      <p class="steptitle" style="margin-top:12px">logits [2.1, −0.3, 1.5, 0.7] → softmax</p>
+      <div class="pbar pick"><b style="color:var(--e0)">E0</b><div class="track"><div class="fill" style="width:53%;background:var(--e0)"></div></div><b>0.53 ✓</b></div>
+      <div class="pbar off"><b style="color:var(--e1)">E1</b><div class="track"><div class="fill" style="width:5%;background:var(--e1)"></div></div><span>0.05</span></div>
+      <div class="pbar pick"><b style="color:var(--e2)">E2</b><div class="track"><div class="fill" style="width:29%;background:var(--e2)"></div></div><b>0.29 ✓</b></div>
+      <div class="pbar off"><b style="color:var(--e3)">E3</b><div class="track"><div class="fill" style="width:13%;background:var(--e3)"></div></div><span>0.13</span></div>
+      <div class="stackrow" style="margin-top:12px"><span class="muted">top-2</span>
+        <div class="stack"><span style="width:53%;background:var(--e0)">0.53</span><span style="width:29%;background:var(--e2)">0.29</span></div><span>sum 0.82</span></div>
+      <div class="stackrow"><span class="muted">÷ 0.82</span>
+        <div class="stack"><span style="width:65%;background:var(--e0)">0.65</span><span style="width:35%;background:var(--e2)">0.35</span></div><span><b>sum 1.00</b></span></div>
+    </div>
+    <div class="card">
+      <table class="plain">
+        <tr><th>Choice</th><th>Example</th><th>Who</th></tr>
+        <tr><td><b>softmax</b>: scores compete, sum to 1</td><td>[0.53, 0.05, 0.29, 0.13]</td><td>Qwen3, ours</td></tr>
+        <tr><td><b>sigmoid</b>: each score alone, 0–1</td><td>[0.89, 0.43, 0.82, 0.67]</td><td>DeepSeek-V3, Kimi K2</td></tr>
+      </table>
+      <div class="key"><b>Router in fp32.</b> Switch Transformer diverged with a 16-bit router.<br><b>Start it small.</b> 1/10 init scale = stable runs.</div>
+    </div>
+  </div>
+</div>
+
+<!-- T3 -->
+<div class="blk" id="t3">
+  <h3><span class="q">T3</span>Collapse: the rich get richer</h3>
   <div class="row">
     <div class="card">
       <div class="controls">
@@ -565,347 +287,506 @@ for e, expert in enumerate(self.experts):
         <span id="biasv" class="muted" style="font-size:13px">0.0</span>
       </div>
       <div class="scroll"><table class="heat" id="heat"></table></div>
-      <div class="legend"><span><i style="background:var(--ink)"></i>outlined = a token's top-2 pick</span><span>"weights" column = top-2 probs renormalised to sum to 1</span></div>
       <div class="buckets" id="buckets"></div>
       <div class="stat" id="stats"></div>
-      <div class="scroll"><svg id="bars" class="viz" viewBox="0 0 520 170" style="margin-top:6px; min-width:360px"></svg></div>
     </div>
-    <div>
-      <div class="code"><div class="file"><span>moe_pipeline.py · MoE.forward (routing part)</span><span>L33–39</span></div>
-<pre><code class="language-python">def forward(self, x):
-    B, T, D = x.shape
-    xf = x.reshape(-1, D)                        # (N,D), N=B*T
-    # router in fp32 -> probabilities over experts
-    probs = self.router(xf).float().softmax(-1)  # (N,E)   ← the heat-map
-    topw, topi = probs.topk(self.k, dim=-1)      # (N,k)   ← outlined cells
-    topw = topw / topw.sum(-1, keepdim=True)     # renormalise → "weights"</code></pre></div>
-      <div class="card" style="margin-top:14px">
-        <h3>Things to try</h3>
-        <ul>
-          <li>With the slider at 0, each expert gets about a quarter of the 16 slots (8 tokens × 2 picks), and the balancing loss sits near <b>1.0</b>.</li>
-          <li>Slide to 4: nearly every token puts E0 in its top 2. E0's load goes toward 2× an even share and the loss climbs toward 2. That higher loss is what pushes the router back toward balance during training.</li>
-          <li>Each token's two weights always add up to 1. For a given token, the MoE output is a weighted average of 2 expert outputs.</li>
-        </ul>
-      </div>
+    <div class="card">
+<pre class="dia">E0 picked a bit more ──► more gradient ──► gets better
+        ▲                                     │
+        └──── picked even more ◄── router likes it more
+                         (other experts starve → dead experts)</pre>
+      <div class="math" style="margin-top:12px">MaxVio = (max load − avg load) / avg load</div>
+      <p class="cap">0 = even · 1 = busiest expert has 2× average. Slide the bar left: watch E0's bucket fill and <b>aux</b> climb.</p>
     </div>
   </div>
-</section>
+</div>
 
-<!-- 3 ─────────────────────────────────────────────── -->
-<section id="s3">
-  <h2><span class="n">3</span><code>MoE.forward</code>, line by line</h2>
-  <p class="sub">Real shapes from the run: batch 64 × context 256, so N = 16,384 tokens per GPU in each layer.</p>
+<!-- T4 -->
+<div class="blk" id="t4">
+  <h3><span class="q">T4</span>Capacity vs dropless</h3>
   <div class="row">
+    <div class="card">
+      <div class="controls"><button id="capBtn" class="on">Capacity factor 1.25</button><button id="dropBtn">Dropless</button><span id="capStat" class="muted" style="font-size:13px"></span></div>
+      <div id="capViz"></div>
+      <p class="cap">8 tokens × top-2 = 16 slots / 4 experts = 4 avg × 1.25 → <b>5 slots each</b>. Bar = capacity line.</p>
+    </div>
+    <div class="card">
+      <div class="math">capacity = tokens × k / E × factor</div>
+      <table class="plain">
+        <tr><th></th><th>capacity</th><th>dropless</th></tr>
+        <tr><td>overflow tokens</td><td>skip the expert (residual only)</td><td>always processed</td></tr>
+        <tr><td>tensor shapes</td><td>fixed, simple</td><td>variable (grouped GEMM)</td></tr>
+        <tr><td>quality</td><td>worse</td><td><b>better</b> → every modern model</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- T5 -->
+<div class="blk" id="t5">
+  <h3><span class="q">T5</span>Many small experts (+ shared)</h3>
+  <div class="row">
+    <div class="card">
+      <div class="slrow"><span class="muted">dense FFN</span><span>
+        <span class="stack" style="height:22px"><span style="width:100%;background:var(--dense)">6,144 wide</span></span></span></div>
+      <div class="slrow"><span class="muted">token uses</span><span>
+        <span class="stack" style="height:22px">
+          <span style="width:12.5%;background:var(--e0)">768</span><span style="width:12.5%;background:var(--e1)">768</span><span style="width:12.5%;background:var(--e2)">768</span><span style="width:12.5%;background:var(--e3)">768</span>
+          <span style="width:12.5%;background:var(--e0)">768</span><span style="width:12.5%;background:var(--e1)">768</span><span style="width:12.5%;background:var(--e2)">768</span><span style="width:12.5%;background:var(--e3)">768</span>
+        </span></span></div>
+      <p class="cap">8 experts × 768 = 6,144: same width as one dense FFN, picked from 128.</p>
+    </div>
     <div class="card">
       <table class="plain">
-        <tr><th>Line</th><th>What happens</th><th>Shape</th></tr>
-        <tr><td>35</td><td>Flatten batch and time: from here on, every token is just a row</td><td><code>(16384, 384)</code></td></tr>
-        <tr><td>37</td><td>Router <code>Linear(384→4)</code> + softmax gives a probability per expert</td><td><code>(16384, 4)</code></td></tr>
-        <tr><td>38</td><td>Keep each token's 2 highest probs (<code>topw</code>) and which experts they are (<code>topi</code>)</td><td><code>(16384, 2)</code> ×2</td></tr>
-        <tr><td>39</td><td>Rescale the 2 weights to add up to 1</td><td><code>(16384, 2)</code></td></tr>
-        <tr><td>41</td><td>Empty output buffer</td><td><code>(16384, 384)</code></td></tr>
-        <tr><td>44</td><td>For expert e: list every (token, slot) that picked it</td><td>~8,192 tokens each</td></tr>
-        <tr><td>47</td><td><b>Gather</b> those rows and run the expert's SwiGLU on just them</td><td><code>(n_e, 384)</code></td></tr>
-        <tr><td>48</td><td><b>Scatter-add</b> weight × output back into those token rows</td><td>into <code>(16384, 384)</code></td></tr>
-        <tr><td>52–55</td><td>Routing stats for the balancing loss (section 5)</td><td>scalars / <code>(4,)</code></td></tr>
-        <tr><td>56</td><td>Back to batch shape</td><td><code>(64, 256, 384)</code></td></tr>
+        <tr><th></th><th>experts</th><th>pick</th><th>combinations</th></tr>
+        <tr><td>Mixtral</td><td>8</td><td>2</td><td>28</td></tr>
+        <tr><td>Qwen3-30B</td><td>128</td><td>8</td><td><b>1.4 trillion</b></td></tr>
       </table>
-      <div class="callout"><b>Why ~8,192 tokens per expert?</b> 16,384 tokens × 2 picks = 32,768 slots, split over 4 experts. Each expert does half the work of the dense FFN, but 2 experts run per token, so FFN compute per token is about <b>2×</b> the dense model's. That's why the batch is 64, not 120.</div>
-      <div class="callout"><b>Why call an expert that got 0 tokens (line 47)?</b> Under ZeRO-3, FSDP expects a gradient for every parameter in the block on every GPU. Running the expert on an empty tensor keeps it in the backward pass, so it gets a zero gradient instead of no gradient.</div>
-    </div>
-    <div>
-      <div class="code"><div class="file"><span>moe_pipeline.py · MoE</span><span>L21–56</span></div>
-<pre><code class="language-python">class MoE(nn.Module):
-    """Top-k routed SwiGLU experts (dropless: no token is ever dropped)."""
-
-    def __init__(self, c, E=4, k=2):
-        super().__init__()
-        self.E, self.k = E, k
-        self.router = nn.Linear(c.D, E, bias=False)
-        self.experts = nn.ModuleList([SwiGLU(c) for _ in range(E)])
-        # filled every forward; read by the training loop
-        self.aux = None        # load-balancing loss (scalar tensor)
-        self.load = None       # fraction of routed slots per expert, shape (E,)
-
-    def forward(self, x):
-        B, T, D = x.shape
-        xf = x.reshape(-1, D)                                   # (N,D), N=B*T
-        # router in fp32 -> probabilities over experts
-        probs = self.router(xf).float().softmax(-1)             # (N,E)
-        topw, topi = probs.topk(self.k, dim=-1)                 # (N,k) each
-        topw = topw / topw.sum(-1, keepdim=True)                # renormalise -> sums to 1
-
-        out = torch.zeros_like(xf)
-        for e, expert in enumerate(self.experts):
-            # which (token, slot) pairs chose expert e
-            tok, slot = (topi == e).nonzero(as_tuple=True)
-            # ALWAYS call the expert, even with 0 tokens: keeps every expert in the
-            # autograd graph so FSDP gets a (zero) grad for it on every rank
-            y = expert(xf[tok])                                 # (n_e,D)
-            out.index_add_(0, tok, y * topw[tok, slot, None].to(y.dtype))
-
-        # Switch-style load balancing: E * sum_e f_e * P_e  (=1 when perfectly uniform)
-        # f_e = share of routed slots that went to e (no grad), P_e = mean router prob
-        f = F.one_hot(topi, self.E).float().sum((0, 1)) / (xf.size(0) * self.k)
-        P = probs.mean(0)
-        self.aux = self.E * (f * P).sum()
-        self.load = f.detach()
-        return out.view(B, T, D)</code></pre></div>
+      <div class="key"><b>Shared expert</b> = one expert every token always uses, home for common knowledge (DeepSeek, Kimi). Qwen3 and ours: none.</div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- 4: worked example ─────────────────────────────── -->
-<section id="s3b">
-  <h2><span class="n">4</span>Worked example: 4 tokens through <code>MoE.forward</code></h2>
-  <p class="sub">The same logic as above, with small numbers you can follow by hand.</p>
+<!-- T6 -->
+<div class="blk" id="t6">
+  <h3><span class="q">T6</span>Upcycling: grow an MoE from a dense model</h3>
   <div class="row">
+    <div class="card" id="upViz"></div>
     <div class="card">
-      <h3>Steps 1–3: score, pick the top 2, rescale</h3>
-      <div class="scroll"><table class="plain">
-        <tr><th>token</th><th>probs (E0, E1, E2, E3)</th><th>topi</th><th>topw → rescaled</th></tr>
-        <tr><td>t0 "cat"</td><td><b>0.50</b>, 0.10, <b>0.30</b>, 0.10</td><td>[0, 2]</td><td>[0.50, 0.30] → [0.625, 0.375]</td></tr>
-        <tr><td>t1 "ran"</td><td>0.05, <b>0.60</b>, 0.15, <b>0.20</b></td><td>[1, 3]</td><td>[0.60, 0.20] → [0.75, 0.25]</td></tr>
-        <tr><td>t2 "the"</td><td><b>0.40</b>, <b>0.35</b>, 0.15, 0.10</td><td>[0, 1]</td><td>[0.40, 0.35] → [0.53, 0.47]</td></tr>
-        <tr><td>t3 "dog"</td><td><b>0.45</b>, 0.05, <b>0.40</b>, 0.10</td><td>[0, 2]</td><td>[0.45, 0.40] → [0.53, 0.47]</td></tr>
-      </table></div>
-      <p class="muted" style="margin-top:8px">Rescaling makes each token's two weights add up to 1, so its output is a weighted average and stays on the same scale as one dense FFN output.</p>
-
-      <h3 style="margin-top:16px">Step 4: loop over experts, not tokens</h3>
-      <div class="scroll"><table class="plain">
-        <tr><th>e</th><th>tok</th><th>slot</th><th>added to <code>out</code></th></tr>
-        <tr><td style="color:var(--e0)"><b>0</b></td><td>[0, 2, 3]</td><td>[0, 0, 0]</td><td>t0 += 0.625·E0(x0) · t2 += 0.53·E0(x2) · t3 += 0.53·E0(x3)</td></tr>
-        <tr><td style="color:var(--e1)"><b>1</b></td><td>[1, 2]</td><td>[0, 1]</td><td>t1 += 0.75·E1(x1) · t2 += 0.47·E1(x2)</td></tr>
-        <tr><td style="color:var(--e2)"><b>2</b></td><td>[0, 3]</td><td>[1, 1]</td><td>t0 += 0.375·E2(x0) · t3 += 0.47·E2(x3)</td></tr>
-        <tr><td style="color:var(--e3)"><b>3</b></td><td>[1]</td><td>[1]</td><td>t1 += 0.25·E3(x1)</td></tr>
-      </table></div>
-      <p style="margin-top:8px"><code>slot</code> says whether the expert was the token's 1st or 2nd choice, which picks the right weight. Each expert runs <b>once</b> on all its tokens together (gather), and the results are added back into those token rows (scatter). After the loop, every token has exactly 2 contributions:</p>
-      <p><code>out[t0] = 0.625·E0(x0) + 0.375·E2(x0)</code></p>
-      <p class="muted">Looping over 16,384 tokens one at a time would be very slow on a GPU. Looping over 4 experts means 4 large matrix multiplies.</p>
-
-      <h3 style="margin-top:16px">Balancing loss on this example</h3>
-      <div class="scroll"><table class="plain">
-        <tr><th></th><th>E0</th><th>E1</th><th>E2</th><th>E3</th></tr>
-        <tr><td>picks (of 8)</td><td>3</td><td>2</td><td>2</td><td>1</td></tr>
-        <tr><td><code>f</code></td><td>0.375</td><td>0.25</td><td>0.25</td><td>0.125</td></tr>
-        <tr><td><code>P</code> (column mean)</td><td>0.35</td><td>0.275</td><td>0.25</td><td>0.125</td></tr>
-      </table></div>
-      <p style="margin-top:8px"><code>aux = 4 × (0.131 + 0.069 + 0.0625 + 0.016) = <b>1.11</b></code>, a bit above the balanced minimum of 1.0. The gradient with respect to each <code>P<sub>e</sub></code> is <code>4·f<sub>e</sub></code>. E0 is the busiest, so its probability is pushed down hardest, which frees up share for E3.</p>
-    </div>
-    <div>
-      <div class="card">
-        <h3>How the router learns</h3>
-        <p>The <b>choice</b> (<code>topi</code>) is just an index, so no gradient flows through it. The <b>weights</b> (<code>topw</code>) are computed from <code>probs</code>, so they do carry a gradient.</p>
-        <p>When the language-model loss backpropagates, it asks for each token: "would a bit more E0 and a bit less E2 have helped?" That signal flows <code>topw → probs → router.weight</code>. The router gradually raises the scores of experts that help a token.</p>
-        <div class="callout"><b>Why experts specialise:</b> an expert only gets gradients from the tokens routed to it. If E1 keeps getting verb-like tokens, it trains mostly on verbs and gets better at them. The router then sends it more verbs, and the effect reinforces itself.</div>
-        <div class="callout"><b>Why the balancing loss is needed:</b> the same feedback can run away. If E0 gets slightly better early on, it gets more tokens, so more training, and so even more tokens, until E3 gets none (a dead expert). The balancing loss, at weight 0.01, keeps nudging the shares back toward even.</div>
-      </div>
-      <div class="code"><div class="file"><span>the whole picture</span><span></span></div>
-<pre><code class="language-plaintext">MoEGPT
- └─ 7 × MoEBlock
-      ├─ x = x + Attention(RMSNorm(x))      ← same as dense
-      └─ x = x + MoE(RMSNorm(x))            ← steps 1–4
-            └─ stores aux + load for this layer
-
-training step (moe_launch.py)
-   loss = cross_entropy + 0.01 × mean(aux over 7 layers)
-   loss.backward()
-     → each expert learns from its own tokens
-     → router learns who to send where</code></pre></div>
-    </div>
-  </div>
-</section>
-
-<!-- 5 ─────────────────────────────────────────────── -->
-<section id="s4">
-  <h2><span class="n">5</span>The load-balancing loss</h2>
-  <p class="sub">Without it, the router tends to settle on 1–2 favourite experts, and the other experts stop learning.</p>
-  <div class="row">
-    <div class="card">
-      <p style="font-size:17px; text-align:center; margin:6px 0 14px"><code style="font-size:16px">aux = E · Σ<sub>e</sub> f<sub>e</sub> · P<sub>e</sub></code></p>
       <table class="plain">
-        <tr><th></th><th>Meaning</th><th>Gradient?</th></tr>
-        <tr><td><code>f<sub>e</sub></code></td><td>share of the top-2 picks that went to expert e (counted from <code>topi</code>)</td><td>no, it's a count</td></tr>
-        <tr><td><code>P<sub>e</sub></code></td><td>average router probability for expert e over all tokens</td><td><b>yes</b>, flows to the router</td></tr>
+        <tr><th>method</th><th>experts start</th><th>risk</th></tr>
+        <tr><td>copy</td><td>identical</td><td>router can't tell clones apart → collapse</td></tr>
+        <tr><td>partition</td><td>different slices</td><td>each expert is smaller</td></tr>
+        <tr><td>drop</td><td>copy, ~50% neurons redrawn</td><td>best balance (r = 0.5)</td></tr>
       </table>
-      <svg class="viz" viewBox="0 0 520 190" style="margin-top:14px" role="img" aria-label="Balanced routing gives aux 1.0, collapsed routing gives aux near 2">
+      <div class="key">Keeps what dense already learned. Worth it below ~2× the dense training cost; above that, train from scratch.</div>
+    </div>
+  </div>
+</div>
+
+<!-- T7 -->
+<div class="blk" id="t7">
+  <h3><span class="q">T7</span>Expert parallelism</h3>
+  <div class="row">
+    <div class="card">
+      <svg class="viz" viewBox="0 0 560 220" role="img" aria-label="Token on GPU 0 is dispatched to experts on GPU 1 and GPU 3 and combined back">
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/></marker>
+              <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker></defs>
+        <g font-size="12">
+          <rect x="15" y="80" width="120" height="64" rx="10" fill="var(--panel)" stroke="var(--ink)" stroke-width="1.5"/>
+          <rect x="155" y="80" width="120" height="64" rx="10" fill="var(--panel)" stroke="var(--line)"/>
+          <rect x="295" y="80" width="120" height="64" rx="10" fill="var(--panel)" stroke="var(--line)"/>
+          <rect x="435" y="80" width="120" height="64" rx="10" fill="var(--panel)" stroke="var(--line)"/>
+          <text x="75" y="102" text-anchor="middle" font-weight="700">GPU 0</text><text x="75" y="120" text-anchor="middle" style="fill:var(--muted)">E0–E3</text>
+          <text x="75" y="137" text-anchor="middle" font-size="11" style="fill:var(--accent)">token "the" lives here</text>
+          <text x="215" y="102" text-anchor="middle" font-weight="700">GPU 1</text><text x="215" y="120" text-anchor="middle" style="fill:var(--muted)">E4–<tspan font-weight="700" style="fill:var(--accent)">E6</tspan>–E7</text>
+          <text x="355" y="102" text-anchor="middle" font-weight="700">GPU 2</text><text x="355" y="120" text-anchor="middle" style="fill:var(--muted)">E8–E11</text>
+          <text x="495" y="102" text-anchor="middle" font-weight="700">GPU 3</text><text x="495" y="120" text-anchor="middle" style="fill:var(--muted)">E12–<tspan font-weight="700" style="fill:var(--accent)">E13</tspan>–E15</text>
+        </g>
+        <path d="M95,80 Q155,30 205,78" fill="none" stroke="var(--accent)" stroke-width="2" marker-end="url(#ah)"/>
+        <path d="M100,80 Q300,0 485,78" fill="none" stroke="var(--accent)" stroke-width="2" marker-end="url(#ah)"/>
+        <text x="300" y="30" text-anchor="middle" font-size="12" font-weight="700" style="fill:var(--accent)">① dispatch (all-to-all)</text>
+        <path d="M205,146 Q155,196 95,146" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ah2)"/>
+        <path d="M485,146 Q300,226 100,146" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ah2)"/>
+        <text x="300" y="212" text-anchor="middle" font-size="12" font-weight="700" style="fill:var(--muted)">② combine (all-to-all)</text>
+      </svg>
+    </div>
+    <div class="card">
+      <table class="plain">
+        <tr><th>link</th><th>traffic time / sequence</th></tr>
+        <tr><td>NVLink, inside a node</td><td><b>0.05 s</b> ≈ compute (0.07 s) → overlap</td></tr>
+        <tr><td>network, between nodes</td><td><b>0.90 s</b> = 12× compute</td></tr>
+      </table>
+      <div class="key">Keep EP inside one node. Dense parts (attention, router, embeddings) use ZeRO-1.<br><b>Ours:</b> no EP. ZeRO-3 shards each whole MoEBlock across 2 GPUs.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ LOSSES ═══════════════════════════ -->
+<h2 class="part">Part 2 · Loss functions</h2>
+
+<!-- L1 -->
+<div class="blk" id="l1">
+  <h3><span class="q">L1</span>Language loss: cross-entropy</h3>
+  <div class="row">
+    <div class="card">
+      <p class="steptitle">"Once upon a ___"</p>
+      <div class="pbar pick" style="grid-template-columns:52px 1fr 64px"><b>time</b><div class="track"><div class="fill" style="width:60%;background:var(--good)"></div></div><b>0.60 ✓</b></div>
+      <div class="pbar" style="grid-template-columns:52px 1fr 64px"><span>day</span><div class="track"><div class="fill" style="width:15%;background:var(--dense)"></div></div><span>0.15</span></div>
+      <div class="pbar" style="grid-template-columns:52px 1fr 64px"><span>hill</span><div class="track"><div class="fill" style="width:10%;background:var(--dense)"></div></div><span>0.10</span></div>
+      <div class="pbar" style="grid-template-columns:52px 1fr 64px"><span>…</span><div class="track"><div class="fill" style="width:15%;background:var(--dense)"></div></div><span>0.15</span></div>
+      <div class="math" style="margin:12px 0 0">loss = −ln p(correct) = −ln 0.60 = <b>0.51</b></div>
+    </div>
+    <div class="card">
+      <table class="plain">
+        <tr><th>p(correct)</th><th>0.90</th><th>0.60</th><th>0.10</th><th>0.01</th></tr>
+        <tr><td>loss</td><td>0.11</td><td>0.51</td><td>2.30</td><td>4.61</td></tr>
+      </table>
+      <div class="math" style="margin-top:12px">perplexity = e<sup>loss</sup></div>
+      <div class="stat">
+        <div><div class="muted">our MoE val loss</div><div class="big">2.016</div></div>
+        <div><div class="muted">→ perplexity</div><div class="big">7.5</div></div>
+      </div>
+      <p class="cap">≈ the model is as unsure as picking among 7.5 equally likely tokens.</p>
+    </div>
+  </div>
+</div>
+
+<!-- L2 -->
+<div class="blk" id="l2">
+  <h3><span class="q">L2</span>Load-balancing (aux) loss</h3>
+  <div class="row">
+    <div class="card">
+      <div class="math">aux = N · Σ<sub>e</sub> f<sub>e</sub> · P<sub>e</sub></div>
+      <table class="plain">
+        <tr><th></th><th>what</th><th>gradient?</th></tr>
+        <tr><td><code>f<sub>e</sub></code></td><td>share of top-k picks for expert e (a count)</td><td>no</td></tr>
+        <tr><td><code>P<sub>e</sub></code></td><td>mean router probability for e</td><td><b>yes</b> → router</td></tr>
+      </table>
+      <svg class="viz" viewBox="0 0 520 190" style="margin-top:10px" role="img" aria-label="Balanced routing gives aux 1.0, collapsed routing gives aux 1.38">
         <text x="130" y="18" text-anchor="middle" font-size="13" font-weight="700">Balanced</text>
         <text x="390" y="18" text-anchor="middle" font-size="13" font-weight="700">Collapsing onto E0</text>
         <g id="balbars"></g>
-        <text x="130" y="182" text-anchor="middle" font-size="13">aux = 4 · 4 · (¼·¼) = <tspan font-weight="700" style="fill:var(--good)">1.00</tspan></text>
-        <text x="390" y="182" text-anchor="middle" font-size="13">aux ≈ 4·Σ f² = <tspan font-weight="700" style="fill:var(--bad)">1.38</tspan> (P ≈ f)</text>
+        <text x="130" y="182" text-anchor="middle" font-size="13">aux = <tspan font-weight="700" style="fill:var(--good)">1.00</tspan></text>
+        <text x="390" y="182" text-anchor="middle" font-size="13">aux ≈ 4·Σf² = <tspan font-weight="700" style="fill:var(--bad)">1.38</tspan></text>
       </svg>
-      <p>Pushing <code>aux</code> down moves probability away from overloaded experts (high f<sub>e</sub>) and toward idle ones. It's weighted <code>0.01</code>, small enough that it nudges routing without fighting the language-model loss.</p>
-      <p class="muted">The model computes this per layer. <code>aux_loss(model)</code> averages it over the 7 MoE layers from the last forward pass.</p>
     </div>
-    <div>
-      <div class="code"><div class="file"><span>moe_pipeline.py · stats + helpers</span><span>L50–55, L96–108</span></div>
-<pre><code class="language-python"># inside MoE.forward
-f = F.one_hot(topi, self.E).float().sum((0, 1)) / (xf.size(0) * self.k)
-P = probs.mean(0)
-self.aux = self.E * (f * P).sum()
-self.load = f.detach()
-
-def moe_layers(model):
-    return [m for m in model.modules() if isinstance(m, MoE)]
-
-def aux_loss(model):
-    """Mean load-balancing loss over all MoE layers of the last forward."""
-    layers = moe_layers(model)
-    return sum(m.aux for m in layers) / len(layers)
-
-def expert_load(model):
-    """(L,E) tensor: per-layer share of routed slots each expert got."""
-    return torch.stack([m.load for m in moe_layers(model)])</code></pre></div>
-      <div class="code"><div class="file"><span>moe_launch.py · training step</span><span># MoE</span></div>
-<pre><code class="language-python">loss, n = loss_fn(model(tokens, attn), tokens, loss_mask)
-...
-# MoE: + load-balancing loss so the router doesn't send every token to 1 expert
-aux = aux_loss(model)
-(loss + AUX_COEF * aux).backward()       # AUX_COEF = 0.01</code></pre></div>
+    <div class="card">
+      <p class="steptitle">How it pushes back</p>
+      <div class="math" style="margin-top:6px">∂aux / ∂P<sub>e</sub> = N · f<sub>e</sub></div>
+      <table class="plain">
+        <tr><th></th><th>E0</th><th>E1</th><th>E2</th><th>E3</th></tr>
+        <tr><td>f (collapsing)</td><td>0.50</td><td>0.25</td><td>0.15</td><td>0.10</td></tr>
+        <tr><td>push on P</td><td style="color:var(--bad)"><b>↓↓ 2.0</b></td><td>↓ 1.0</td><td>↓ 0.6</td><td style="color:var(--good)">↓ 0.4</td></tr>
+      </table>
+      <p class="cap">Busy experts get pushed down hardest. Softmax probs sum to 1, so the freed share flows to idle experts.</p>
+      <table class="plain" style="margin-top:10px">
+        <tr><th>N = 4</th><th>aux</th></tr>
+        <tr><td>perfectly even</td><td><b>1.0</b> (minimum)</td></tr>
+        <tr><td>top-2 always on the same 2</td><td><b>2.0</b> (max with top-2)</td></tr>
+      </table>
+      <div class="key">Weighted small (α = 0.01) because its gradient fights the language loss on the same router weights.</div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- 5 ─────────────────────────────────────────────── -->
-<section id="s5">
-  <h2><span class="n">6</span>Parameters: total vs active</h2>
-  <p class="sub">The MoE holds about 3× the weights, but each token only passes through 2 of the 4 experts.</p>
+<!-- L3 -->
+<div class="blk" id="l3">
+  <h3><span class="q">L3</span>Router z-loss <span class="not">not in our code</span></h3>
   <div class="row">
     <div class="card">
-      <svg class="viz" viewBox="0 0 520 210" role="img" aria-label="Parameter counts: dense 19.7M, MoE total 56.9M, MoE active 32.1M">
-        <g id="pbars"></g>
-      </svg>
-      <div class="legend"><span><i style="background:var(--dense)"></i>shared: embeddings, attention, norms, head, routers</span><span><i style="background:var(--accent)"></i>FFN / experts</span></div>
-      <table class="plain" style="margin-top:12px">
-        <tr><th>Piece</th><th>Per block</th><th>× 7 blocks</th></tr>
-        <tr><td>1 SwiGLU (gate, up, bottom: 3 × 384 × 1536)</td><td>1.77M</td><td>12.4M</td></tr>
-        <tr><td>4 experts</td><td>7.08M</td><td>49.5M</td></tr>
-        <tr><td>router (384 × 4)</td><td>1,536</td><td>10.8k</td></tr>
+      <div class="math">z = ( log Σ<sub>i</sub> e<sup>logit<sub>i</sub></sup> )²</div>
+      <table class="plain">
+        <tr><th>logits</th><th>log Σ e</th><th>z</th></tr>
+        <tr><td>[2, 1, 0.5]</td><td>2.46</td><td style="color:var(--good)"><b>6</b></td></tr>
+        <tr><td>[20, 10, 5]</td><td>20.0</td><td style="color:var(--bad)"><b>400</b></td></tr>
       </table>
-      <p style="margin-top:10px"><b>active</b> = total − all experts + experts × k/E = 56.86M − 49.55M + 49.55M × 2/4 ≈ <b>32.1M</b></p>
     </div>
-    <div>
-      <div class="code"><div class="file"><span>moe_pipeline.py · param_counts</span><span>L111–116</span></div>
-<pre><code class="language-python">def param_counts(model, E, k):
-    """(total, active-per-token) parameter counts for an MoEGPT."""
-    total = sum(p.numel() for p in model.parameters())
-    expert = sum(p.numel() for m in moe_layers(model) for p in m.experts.parameters())
-    active = total - expert + expert * k // E
-    return total, active</code></pre></div>
-      <div class="code"><div class="file"><span>moe_launch.py · printed at start</span><span># MoE</span></div>
-<pre><code class="language-python">P_total, P_active = param_counts(model, E, TOP_K)   # MoE: only top-k experts run per token
-print0(rank, f"MoE: {E} experts, top-{TOP_K} | {P_total/1e6:.2f}M total, "
-             f"{P_active/1e6:.2f}M active per token")
-# → MoE: 4 experts, top-2 | 56.86M total, 32.09M active per token</code></pre></div>
+    <div class="card">
+      <p>Same ranking, but huge logits → <code>e<sup>20</sup></code> ≈ 485 million → rounding errors in bf16.</p>
+      <div class="key">z-loss (× 0.001) keeps logits small → stable training. ST-MoE: 3/3 runs stable with it, 4/6 without.</div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- 6 ─────────────────────────────────────────────── -->
-<section id="s6">
-  <h2><span class="n">7</span><code>zero3_launch.py</code> → <code>moe_launch.py</code></h2>
-  <p class="sub"><code>moe_launch.py</code> is a copy of the dense launcher. Every changed line is tagged <code># MoE</code>, and <code>diff zero3_launch.py moe_launch.py</code> shows exactly these changes.</p>
+<!-- L4 -->
+<div class="blk" id="l4">
+  <h3><span class="q">L4</span>Balancing with no loss: the bias trick <span class="not">not in our code</span></h3>
+  <div class="row">
+    <div class="card">
+      <div class="controls"><button id="biasOff" class="on">bias = 0</button><button id="biasOn">E5 is busy → bias −0.5</button></div>
+      <div id="biasViz"></div>
+      <p class="stepnote" id="biasNote"></p>
+    </div>
+    <div class="card">
+<pre class="dia">pick:    score + bias  → top-k     (bias only changes WHO)
+weight:  score         → rescale   (weights ignore bias)
+
+each step:  busier than avg → bias −= 0.001
+            quieter         → bias += 0.001</pre>
+      <table class="plain" style="margin-top:10px">
+        <tr><th>1B model</th><th>perplexity</th><th>MaxVio</th></tr>
+        <tr><td>aux loss</td><td>9.56</td><td>0.72</td></tr>
+        <tr><td><b>bias trick</b></td><td><b>9.50</b></td><td><b>0.04</b></td></tr>
+      </table>
+      <div class="key">No gradient fight with the language loss. Current standard (DeepSeek-V3, Kimi K2, GLM-4.5).</div>
+    </div>
+  </div>
+</div>
+
+<!-- L5 -->
+<div class="blk" id="l5">
+  <h3><span class="q">L5</span>Our total loss</h3>
+  <div class="row">
+    <div class="card">
+      <div class="math">loss = cross-entropy + 0.01 × aux</div>
+      <div class="stackrow" style="grid-template-columns:90px 1fr 70px"><span class="muted">end of run</span>
+        <div class="stack"><span style="width:99.5%;background:var(--dense)">CE 2.033</span><span style="width:0.5%;background:var(--accent)"></span></div><span><b>2.043</b></span></div>
+      <p class="cap">0.01 × 1.035 = 0.010 → the aux term is ~0.5% of the loss: a nudge, not a goal.</p>
+    </div>
+    <div class="card">
+      <table class="plain">
+        <tr><th>Loss</th><th>job</th><th>ours</th></tr>
+        <tr><td>cross-entropy</td><td>predict the next token</td><td>✓</td></tr>
+        <tr><td>aux (Switch)</td><td>spread tokens across experts</td><td>✓ α = 0.01</td></tr>
+        <tr><td>z-loss</td><td>keep router logits small</td><td class="muted">—</td></tr>
+        <tr><td>bias trick</td><td>balance without a loss</td><td class="muted">—</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ CODE ═══════════════════════════ -->
+<h2 class="part">Part 3 · Our code</h2>
+
+<!-- C1 -->
+<div class="blk" id="c1">
+  <h3><span class="q">C1</span>Model: router + E SwiGLUs, swapped into the block</h3>
+  <div class="row">
+    <div class="card">
+      <table class="plain">
+        <tr><th></th><th>Dense</th><th>MoE (E = 4, k = 2)</th></tr>
+        <tr><td>FFN shape</td><td>D → 4D → D</td><td>D → 4D → D <span class="muted">each</span></td></tr>
+        <tr><td>FFNs per block</td><td>1</td><td>4</td></tr>
+        <tr><td>FFNs per token</td><td>1</td><td>2</td></tr>
+        <tr><td>FFN params</td><td>1×</td><td>4×</td></tr>
+        <tr><td>FFN compute / token</td><td>1×</td><td>2×</td></tr>
+      </table>
+      <div class="key">Experts are full width (not fine-grained, T5) and start from different random weights (not upcycled, T6).</div>
+    </div>
+    <div>
+      <div class="code"><div class="file"><span>moe_pipeline.py · MoE + MoEBlock</span><span>T1</span></div>
+<pre><code class="language-python">class MoE(nn.Module):
+    def __init__(self, c, E=4, k=2):
+        super().__init__()
+        self.E, self.k = E, k
+        self.router = nn.Linear(c.D, E, bias=False)                  # D → E scores
+        self.experts = nn.ModuleList([SwiGLU(c) for _ in range(E)])  # 4 × dense FFN
+        self.aux = None     # balancing loss (C6)
+        self.load = None    # picks per expert (logs)
+
+class MoEBlock(nn.Module):
+    def __init__(self, c, E=4, k=2):
+        super().__init__()
+        self.attn = Attention(c)          # unchanged
+        self.n1 = RMSNorm(c.D)
+        self.n2 = RMSNorm(c.D)
+        self.ffn = MoE(c, E, k)           # was: SwiGLU(c)</code></pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- C2 -->
+<div class="blk" id="c2">
+  <h3><span class="q">C2</span>Router lines (T2)</h3>
+  <div class="row">
+    <div class="card">
+      <div class="pipe">
+        <span class="ch">x (64, 256, 384)</span><span class="op">reshape →</span>
+        <span class="ch">xf (16384, 384)</span><span class="op">router →</span>
+        <span class="ch">(16384, 4)</span><span class="op">topk →</span>
+        <span class="ch">(16384, 2)</span>
+      </div>
+      <div class="scroll" style="margin-top:12px"><table class="plain">
+        <tr><th>token</th><th>probs (E0, E1, E2, E3)</th><th>topi</th><th>topw</th></tr>
+        <tr><td>t0</td><td><b>0.53</b>, 0.05, <b>0.29</b>, 0.13</td><td>[0, 2]</td><td>[0.65, 0.35]</td></tr>
+        <tr><td>t1</td><td>0.03, <b>0.15</b>, 0.08, <b>0.74</b></td><td>[3, 1]</td><td>[0.83, 0.17]</td></tr>
+        <tr><td>t2</td><td>0.10, <b>0.60</b>, <b>0.25</b>, 0.05</td><td>[1, 2]</td><td>[0.71, 0.29]</td></tr>
+        <tr><td>t3</td><td><b>0.40</b>, 0.10, 0.05, <b>0.45</b></td><td>[3, 0]</td><td>[0.53, 0.47]</td></tr>
+      </table></div>
+      <p class="cap">The running example. Column 0 = 1st choice, column 1 = 2nd: these are the <b>slots</b>.</p>
+    </div>
+    <div>
+      <div class="code"><div class="file"><span>moe_pipeline.py · MoE.forward</span><span>L35–39</span></div>
+<pre><code class="language-python">xf = x.reshape(-1, D)                         # every token = 1 row
+probs = self.router(xf).float().softmax(-1)   # fp32 softmax, (N, E)
+topw, topi = probs.topk(self.k, dim=-1)       # weights + ids, (N, k)
+topw = topw / topw.sum(-1, keepdim=True)      # rescale → sum 1</code></pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- C3 -->
+<div class="blk" id="c3">
+  <h3><span class="q">C3</span>Same sum, two ways to loop</h3>
+  <div class="row">
+    <div>
+      <div class="code"><div class="file"><span>loop over tokens</span><span>slow</span></div>
+<pre><code class="language-python">for i in range(N):                    # each token
+    for j in range(k):                # its 2 choices
+        e, w = topi[i, j], topw[i, j]
+        out[i] += w * experts[e](xf[i])</code></pre></div>
+      <div class="card lv" id="lvTok" style="margin-top:12px"></div>
+      <div class="stat"><div><div class="muted">real run: calls</div><div class="big">32,768</div></div><div><div class="muted">tokens / call</div><div class="big">1</div></div></div>
+    </div>
+    <div>
+      <div class="code"><div class="file"><span>loop over experts (our code)</span><span>fast</span></div>
+<pre><code class="language-python">for e, expert in enumerate(self.experts):
+    tok, slot = (topi == e).nonzero(as_tuple=True)
+    y = expert(xf[tok])
+    out.index_add_(0, tok, y * topw[tok, slot, None])</code></pre></div>
+      <div class="card lv" id="lvExp" style="margin-top:12px"></div>
+      <div class="stat"><div><div class="muted">real run: calls</div><div class="big">4</div></div><div><div class="muted">tokens / call</div><div class="big">~8,192</div></div></div>
+    </div>
+  </div>
+  <div class="key">Token loop = grid <b>row by row</b>. Expert loop = a whole <b>column</b> at once. Same final <code>out</code>.</div>
+</div>
+
+<!-- C4 -->
+<div class="blk" id="c4">
+  <h3><span class="q">C4</span>Building <code>out[0]</code>, one expert at a time</h3>
+  <div class="row">
+    <div class="card">
+      <div class="controls">
+        <button id="accPrev">◀ Back</button><button id="accNext">Next ▶</button>
+        <span id="accStep" class="muted" style="font-size:13px"></span>
+      </div>
+      <svg id="accSvg" class="viz" viewBox="0 0 360 250" role="img" aria-label="2D plot: out[0] = 0.65 × expert 0 + 0.35 × expert 2"></svg>
+    </div>
+    <div class="card">
+      <div class="pipe" style="margin-bottom:12px">
+        <span class="ch" style="color:var(--e0)">E0(x0) = [10, 20]</span>
+        <span class="ch" style="color:var(--e2)">E2(x0) = [−4, 8]</span>
+        <span class="op">weights 0.65, 0.35</span>
+      </div>
+      <div class="eqs" id="accEqs">
+        <div>out[0] = [0, 0]</div>
+        <div>out[0] += 0.65 × [10, 20] = [6.5, 13.0]</div>
+        <div>out[0] += 0.35 × [−4, 8]&nbsp; → [5.1, 15.8]</div>
+        <div class="bad">out[0] &nbsp;= 0.35 × [−4, 8]&nbsp; → [−1.4, 2.8] ✗</div>
+      </div>
+      <p class="stepnote" id="accNote"></p>
+    </div>
+  </div>
+</div>
+
+<!-- C5 -->
+<div class="blk" id="c5">
+  <h3><span class="q">C5</span>The <code>index_add_</code> line, piece by piece <span class="muted" style="font-weight:400;font-size:13px">(expert 0)</span></h3>
+  <div class="row">
+    <div class="card">
+      <div class="controls">
+        <button id="ixPrev">◀ Back</button><button id="ixNext">Next ▶</button>
+        <span id="ixStep" class="muted" style="font-size:13px"></span>
+      </div>
+      <p class="steptitle" id="ixTitle"></p>
+      <div class="scroll"><div class="stage" id="ixStage"></div></div>
+      <p class="stepnote" id="ixNote"></p>
+    </div>
+    <div>
+<pre class="hl"><code class="nohighlight"><span data-k="all">for e, expert in enumerate(self.experts):</span>
+    <span data-k="nz">tok, slot = (topi == e).nonzero(as_tuple=True)</span>
+    <span data-k="run">y = expert(xf[tok])</span>
+    <span data-k="add">out.index_add_(0, tok, </span><span data-k="mul">y * </span><span data-k="w">topw[tok, slot</span><span data-k="none">, None]</span><span data-k="dt">.to(y.dtype)</span><span data-k="add">)</span></code></pre>
+      <div class="key"><code>index_add_(0, tok, src)</code> = <code>out[tok[i]] += src[i]</code>. Adds, never overwrites.</div>
+      <div class="key">Expert got 0 tokens? Still runs on a (0, D) tensor → zero grad → FSDP GPUs stay in sync.</div>
+    </div>
+  </div>
+</div>
+
+<!-- C6 -->
+<div class="blk" id="c6">
+  <h3><span class="q">C6</span>Aux loss in code (L2)</h3>
+  <div class="row">
+    <div class="card">
+      <table class="plain">
+        <tr><th>running example</th><th style="color:var(--e0)">E0</th><th style="color:var(--e1)">E1</th><th style="color:var(--e2)">E2</th><th style="color:var(--e3)">E3</th></tr>
+        <tr><td>picks (of 8)</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+        <tr><td><code>f</code></td><td>0.25</td><td>0.25</td><td>0.25</td><td>0.25</td></tr>
+        <tr><td><code>P</code> (column mean)</td><td>0.265</td><td>0.225</td><td>0.168</td><td>0.343</td></tr>
+        <tr><td><code>f · P</code></td><td>0.066</td><td>0.056</td><td>0.042</td><td>0.086</td></tr>
+      </table>
+      <div class="math" style="margin:10px 0 0">aux = 4 × (0.066 + 0.056 + 0.042 + 0.086) = 4 × 0.25 = <b>1.00</b></div>
+      <p class="cap">Picks are perfectly even, so aux hits its minimum (1.0) whatever P is.</p>
+    </div>
+    <div>
+      <div class="code"><div class="file"><span>moe_pipeline.py · end of MoE.forward</span><span>L52–55</span></div>
+<pre><code class="language-python">f = F.one_hot(topi, self.E).float().sum((0, 1)) / (xf.size(0) * self.k)
+#   topi (N,k) → one-hot (N,k,E) → count per expert → ÷ all picks
+P = probs.mean(0)                       # mean prob per expert (has grad)
+self.aux = self.E * (f * P).sum()       # 1.0 when balanced
+self.load = f.detach()                  # logged as load_min / load_max</code></pre></div>
+      <div class="code"><div class="file"><span>moe_pipeline.py · helper</span><span></span></div>
+<pre><code class="language-python">def aux_loss(model):                    # mean over the 7 MoE layers
+    layers = moe_layers(model)
+    return sum(m.aux for m in layers) / len(layers)</code></pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- C7 -->
+<div class="blk" id="c7">
+  <h3><span class="q">C7</span>Total vs active params (T1)</h3>
+  <div class="row">
+    <div class="card">
+      <svg class="viz" viewBox="0 0 520 200" role="img" aria-label="Dense 19.7M, MoE total 56.9M, MoE active 32.1M"><g id="pbars"></g></svg>
+      <div class="legend"><span><i style="background:var(--dense)"></i>shared: embeddings, attention, norms, head, routers</span><span><i style="background:var(--accent)"></i>FFN / experts</span></div>
+    </div>
+    <div>
+      <div class="code"><div class="file"><span>moe_pipeline.py · param_counts</span><span></span></div>
+<pre><code class="language-python">def param_counts(model, E, k):
+    total = sum(p.numel() for p in model.parameters())
+    expert = sum(p.numel() for m in moe_layers(model) for p in m.experts.parameters())
+    active = total - expert + expert * k // E    # only k of E experts run
+    return total, active
+# 56.86M − 49.55M + 49.55M × 2/4 = 32.09M active</code></pre></div>
+    </div>
+  </div>
+</div>
+
+<!-- C8 -->
+<div class="blk" id="c8">
+  <h3><span class="q">C8</span>Launcher: <code>zero3_launch.py</code> → <code>moe_launch.py</code> (L5)</h3>
   <div class="row">
     <div class="card">
       <table class="plain">
         <tr><th>What</th><th>Dense</th><th>MoE</th></tr>
-        <tr><td>import</td><td><code>GPT, Block</code></td><td><code>MoEGPT, MoEBlock, aux_loss, expert_load, param_counts</code></td></tr>
-        <tr><td>knobs</td><td>—</td><td><code>E, TOP_K = 4, 2</code> · <code>AUX_COEF = 0.01</code></td></tr>
-        <tr><td>model</td><td><code>GPT(cfg)</code></td><td><code>MoEGPT(cfg, E, TOP_K)</code></td></tr>
+        <tr><td>model</td><td><code>GPT(cfg)</code></td><td><code>MoEGPT(cfg, 4, 2)</code></td></tr>
         <tr><td>ZeRO-3 unit</td><td><code>Block</code></td><td><code>MoEBlock</code></td></tr>
         <tr><td>backward</td><td><code>loss</code></td><td><code>loss + 0.01·aux</code></td></tr>
-        <tr><td>logs</td><td>—</td><td><code>aux_loss, load_min, load_max</code></td></tr>
-        <tr><td>files</td><td><code>*_zero3_&lt;id&gt;</code></td><td><code>*_moe_&lt;id&gt;</code></td></tr>
+        <tr><td>logs</td><td>—</td><td><code>aux, load_min, load_max</code></td></tr>
       </table>
-      <div class="callout"><b>Kept identical on purpose:</b> data stream and seed, batch 64, 1,678 steps, LR 3e-4 with 300 warmup steps and cosine decay, <code>torch.manual_seed(0)</code>, eval every 50 steps. Any difference in the loss curves comes from the architecture.</div>
-      <p style="margin-top:12px" class="muted">Meta-device init carries over unchanged. <code>param_init_fn</code> calls <code>reset_parameters()</code> on every <code>nn.Linear</code>, which already covers the router and all 4 experts.</p>
+      <p class="cap">Same data, seed, batch 64, 1,678 steps, LR schedule. Only the architecture differs.</p>
     </div>
     <div>
-      <div class="code"><div class="file"><span>moe_launch.py · model + ZeRO-3</span><span># MoE</span></div>
-<pre><code class="language-python">with torch.device("meta"):
-    model = MoEGPT(cfg, E, TOP_K)                # MoE: was GPT(cfg)
-print0(rank, model_info(model, cfg))
-P_total, P_active = param_counts(model, E, TOP_K)
+      <div class="code"><div class="file"><span>moe_launch.py · the step</span><span># MoE</span></div>
+<pre><code class="language-python">E, TOP_K, AUX_COEF = 4, 2, 0.01
 
-model = FSDP(
-    model,
-    # each MoEBlock is gathered/freed on its own -> peak memory = ~one block
-    auto_wrap_policy=ModuleWrapPolicy({MoEBlock}),   # MoE: was Block
-    sharding_strategy=ShardingStrategy.FULL_SHARD,
-    device_id=local_rank,
-    param_init_fn=param_init_fn,
-)
-opt = torch.optim.AdamW(model.parameters(), lr=base_lr)</code></pre></div>
+model = FSDP(MoEGPT(cfg, E, TOP_K),
+             auto_wrap_policy=ModuleWrapPolicy({MoEBlock}), ...)
+
+loss, n = loss_fn(model(tokens, attn), tokens, loss_mask)   # L1
+aux = aux_loss(model)                                       # L2
+(loss + AUX_COEF * aux).backward()                          # L5</code></pre></div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- 7 ─────────────────────────────────────────────── -->
-<section id="s7">
-  <h2><span class="n">8</span>One training step under ZeRO-3</h2>
-  <p class="sub">Each GPU keeps half of every block. FSDP gathers a full block just before it runs and frees it right after.</p>
+<!-- C9 -->
+<div class="blk" id="c9">
+  <h3><span class="q">C9</span>Results</h3>
   <div class="row">
-    <div class="card">
-      <div class="flow">
-        <div class="st"><div class="k">1</div><div>Get a batch of 64 × 256 tokens (different tokens on each GPU) and build the masks.</div></div>
-        <div class="st"><div class="k">2</div><div><b>Forward, per MoEBlock:</b> FSDP <i>all-gathers</i> the block's full weights (attention + router + 4 experts ≈ 7.7M params ≈ 31 MB), runs it, and frees the gathered copy.</div></div>
-        <div class="st moe"><div class="k">3</div><div><span class="tag">MOE</span><br>Inside the block, the router splits tokens across experts, and each expert's SwiGLU runs on its ~8k tokens. Each layer stores its <code>aux</code> and <code>load</code>.</div></div>
-        <div class="st"><div class="k">4</div><div>Cross-entropy loss on the next token.</div></div>
-        <div class="st moe"><div class="k">5</div><div><span class="tag">MOE</span><br><code>loss + 0.01 × aux_loss(model)</code></div></div>
-        <div class="st"><div class="k">6</div><div><b>Backward:</b> gather each block again, compute gradients, then <i>reduce-scatter</i> them so each GPU keeps only its half.</div></div>
-        <div class="st"><div class="k">7</div><div>Clip gradients to 1.0 globally, then AdamW updates this GPU's half of the weights.</div></div>
-      </div>
-      <p class="muted" style="margin-top:12px">Per GPU, model state is ~57M params × 16 bytes (fp32 weights, grads, Adam m and v) ÷ 2 GPUs ≈ 455 MB. Activations still take up most of the peak memory, just as in session 13.</p>
-    </div>
-    <div>
-      <div class="code"><div class="file"><span>moe_launch.py · the step</span><span>loop body</span></div>
-<pre><code class="language-python">x, d = next(train_stream)
-tokens = torch.from_numpy(x).to(device)
-doc_id = torch.from_numpy(d).to(device)
-attn, loss_mask = make_masks(tokens, doc_id)
-# FSDP all_gathers each MoEBlock just-in-time, runs it, frees it
-loss, n = loss_fn(model(tokens, attn), tokens, loss_mask)
-local_trained += n
-opt.zero_grad(set_to_none=True)
-# MoE: + load-balancing loss so the router doesn't send every token to 1 expert
-aux = aux_loss(model)
-(loss + AUX_COEF * aux).backward()     # reduce_scatter -> keep 1/N of grads
-gnorm = model.clip_grad_norm_(1.0)
-opt.step()                             # update only this rank's shard</code></pre></div>
-    </div>
-  </div>
-</section>
-
-<!-- 8 ─────────────────────────────────────────────── -->
-<section id="s8">
-  <h2><span class="n">9</span>Reading the MoE logs</h2>
-  <p class="sub">Every 50 steps the MoE run adds three columns. Here's how to tell a healthy router from a broken one.</p>
-  <div class="row">
+    <div class="card"><img class="res" src="../results/dense_vs_moe.png" alt="Dense vs MoE: train loss, val loss, throughput, expert load"></div>
     <div class="card">
       <table class="plain">
-        <tr><th>Column</th><th>What it is</th><th>Healthy</th><th>Trouble</th></tr>
-        <tr><td><code>aux_loss</code></td><td>balancing loss, averaged over layers and GPUs</td><td>≈ 1.0–1.1</td><td>creeping toward 2+</td></tr>
-        <tr><td><code>load_max</code></td><td>busiest expert's share, as a multiple of an even split (any layer)</td><td>≲ 1.5</td><td>≈ 2 (in top-2 of nearly every token)</td></tr>
-        <tr><td><code>load_min</code></td><td>idlest expert's share, as a multiple of an even split (any layer)</td><td>≳ 0.5</td><td>≈ 0 (dead expert)</td></tr>
+        <tr><th></th><th>Dense</th><th>MoE</th></tr>
+        <tr><td>final val loss</td><td>2.172</td><td><b>2.016</b></td></tr>
+        <tr><td>val perplexity</td><td>8.77</td><td><b>7.51</b></td></tr>
+        <tr><td>tokens / s</td><td><b>36.6k</b></td><td>23.0k</td></tr>
+        <tr><td>peak memory / GPU</td><td><b>7.5 GB</b></td><td>11.8 GB</td></tr>
+        <tr><td>aux at end</td><td>—</td><td>1.035</td></tr>
+        <tr><td>expert load min / max</td><td>—</td><td>0.62 / 1.34</td></tr>
       </table>
-      <p style="margin-top:12px">With top-2 of 4, an expert can get at most half of all slots (2× an even share), because a token can't pick the same expert twice. So <code>load_max</code> tops out at 2.0.</p>
-      <div class="callout">A log line will look like:<br><code>step 400/1678 | … | loss 2.71 ppl 15.0 | val_ppl 14.6 | aux 1.012 load 0.81-1.22 | gnorm 0.41 | …</code></div>
-    </div>
-    <div>
-      <div class="code"><div class="file"><span>moe_launch.py · logging</span><span># MoE</span></div>
-<pre><code class="language-python"># MoE: routing health. Share of slots per expert as a multiple of uniform
-# (1/E): 1.00 = perfectly balanced, min near 0 = a dead expert
-aux_avg = stats[5].item() / world_size
-load = expert_load(model).to(device)
-dist.all_reduce(load)                  # sum over GPUs
-load = load / world_size * E           # (L,E): mean over GPUs, × E -> 1.0 = even
-load_min, load_max = load.min().item(), load.max().item()
-...
-msg += f" | aux {aux_avg:.3f} load {load_min:.2f}-{load_max:.2f}"   # MoE</code></pre></div>
+      <table class="plain" style="margin-top:12px">
+        <tr><th>log column</th><th>healthy</th><th>trouble</th></tr>
+        <tr><td><code>aux</code></td><td>≈ 1.0–1.1</td><td>→ 2</td></tr>
+        <tr><td><code>load_max</code></td><td>≲ 1.5</td><td>≈ 2</td></tr>
+        <tr><td><code>load_min</code></td><td>≳ 0.5</td><td>≈ 0 (dead)</td></tr>
+      </table>
+      <div class="key">MoE keeps reducing loss, beats dense at every eval, no dead experts. Better per step; ~same per second.</div>
     </div>
   </div>
-</section>
+</div>
 
 </div>
 
@@ -919,14 +800,13 @@ msg += f" | aux {aux_avg:.3f} load {load_min:.2f}-{load_max:.2f}"   # MoE</code>
   const el = (tag, attrs, text) => { const n = document.createElementNS(NS, tag);
     for (const k in attrs) n.setAttribute(k, attrs[k]); if (text != null) n.textContent = text; return n; };
 
-  // ---------- section 2: interactive router ----------
+  // ---------- T3: interactive router ----------
   const TOK = ['Once', 'upon', 'a', 'time', 'there', 'was', 'a', 'cat'];
   const E = 4, K = 2;
   let seed = 7, logits = [];
   function rand() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
   function gauss() { const u = rand() || 1e-9, v = rand(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
   function reroll() { logits = TOK.map(() => Array.from({ length: E }, () => gauss() * 1.1)); render(); }
-
   function render() {
     const bias = +document.getElementById('bias').value;
     document.getElementById('biasv').textContent = bias.toFixed(1);
@@ -937,9 +817,6 @@ msg += f" | aux {aux_avg:.3f} load {load_min:.2f}-{load_max:.2f}"   # MoE</code>
     });
     const top = probs.map(p => p.map((v, e) => [v, e]).sort((a, b) => b[0] - a[0]).slice(0, K));
     const w = top.map(t => { const s = t[0][0] + t[1][0]; return t.map(([v, e]) => [v / s, e]); });
-
-    // heat-map
-    const tbl = document.getElementById('heat');
     let h = '<tr><th></th>' + EC.map((c, e) => `<th style="color:var(${c})">E${e}</th>`).join('') + '<th style="text-align:left">weights</th></tr>';
     probs.forEach((p, i) => {
       const picked = new Set(top[i].map(x => x[1]));
@@ -950,84 +827,105 @@ msg += f" | aux {aux_avg:.3f} load {load_min:.2f}-{load_max:.2f}"   # MoE</code>
       });
       h += `<td class="w">${w[i].map(([v, e]) => `<span style="color:var(${EC[e]})">E${e}</span> ${v.toFixed(2)}`).join(' + ')}</td></tr>`;
     });
-    tbl.innerHTML = h;
-
-    // buckets
+    document.getElementById('heat').innerHTML = h;
     const bk = Array.from({ length: E }, () => []);
-    w.forEach((t, i) => t.forEach(([v, e]) => bk[e].push(`${TOK[i]} <span class="muted">×${v.toFixed(2)}</span>`)));
+    w.forEach((t, i) => t.forEach(([v, e]) => bk[e].push(`${TOK[i]}`)));
     document.getElementById('buckets').innerHTML = bk.map((list, e) =>
-      `<div class="bucket" style="border-color:var(${EC[e]})"><b style="color:var(${EC[e]})">Expert ${e} · ${list.length} tok</b>` +
-      (list.length ? list.map(s => `<span class="chip">${s}</span>`).join('') : '<span class="muted">no tokens. Still runs on an empty tensor.</span>') + '</div>').join('');
-
-    // f, P, aux
+      `<div class="bucket" style="border-color:var(${EC[e]})"><b style="color:var(${EC[e]})">E${e} · ${list.length} tok</b>` +
+      (list.length ? list.map(s => `<span class="chip">${s}</span>`).join('') : '<span class="muted">dead this batch</span>') + '</div>').join('');
     const f = Array(E).fill(0); top.forEach(t => t.forEach(([, e]) => f[e]++));
     const fN = f.map(v => v / (TOK.length * K));
     const P = Array.from({ length: E }, (_, e) => probs.reduce((a, p) => a + p[e], 0) / TOK.length);
     const aux = E * fN.reduce((a, v, e) => a + v * P[e], 0);
     const loads = fN.map(v => v * E);
-    const col = aux < 1.15 ? css('--good') : css('--bad');
+    const col = aux < 1.15 ? 'var(--good)' : 'var(--bad)';
     document.getElementById('stats').innerHTML =
-      `<div><div class="muted">aux = E·Σ f·P</div><div class="big" style="color:${col}">${aux.toFixed(3)}</div></div>` +
-      `<div><div class="muted">load_min / load_max</div><div class="big">${Math.min(...loads).toFixed(2)} / ${Math.max(...loads).toFixed(2)}</div></div>` +
-      `<div class="muted" style="align-self:end">1.00 = perfectly even</div>`;
-
-    // f vs P bars
-    const svg = document.getElementById('bars'); svg.innerHTML = '';
-    const x0 = 40, y0 = 135, H = 105, gw = 115;
-    svg.appendChild(el('line', { x1: x0, y1: y0, x2: 510, y2: y0, stroke: css('--line') }));
-    const yU = y0 - H * 0.25 / 0.6;
-    svg.appendChild(el('line', { x1: x0, y1: yU, x2: 510, y2: yU, stroke: css('--muted'), 'stroke-dasharray': '3 3' }));
-    svg.appendChild(el('text', { x: 4, y: yU + 4, 'font-size': 10, fill: css('--muted') }, 'even'));
-    for (let e = 0; e < E; e++) {
-      const gx = x0 + 12 + e * gw, c = css(EC[e]);
-      const hf = Math.min(H, H * fN[e] / 0.6), hp = Math.min(H, H * P[e] / 0.6);
-      svg.appendChild(el('rect', { x: gx, y: y0 - hf, width: 38, height: hf, fill: c, rx: 3 }));
-      svg.appendChild(el('rect', { x: gx + 44, y: y0 - hp, width: 38, height: hp, fill: c, opacity: 0.35, rx: 3 }));
-      svg.appendChild(el('text', { x: gx + 19, y: y0 - hf - 4, 'text-anchor': 'middle', 'font-size': 10 }, fN[e].toFixed(2)));
-      svg.appendChild(el('text', { x: gx + 63, y: y0 - hp - 4, 'text-anchor': 'middle', 'font-size': 10 }, P[e].toFixed(2)));
-      svg.appendChild(el('text', { x: gx + 41, y: y0 + 16, 'text-anchor': 'middle', 'font-size': 12, 'font-weight': 700, fill: c }, `E${e}`));
-    }
-    svg.appendChild(el('text', { x: x0, y: 164, 'font-size': 11, fill: css('--muted') }, 'solid = fₑ (share of top-2 picks)    faded = Pₑ (mean router prob)'));
+      `<div><div class="muted">aux = N·Σ f·P</div><div class="big" style="color:${col}">${aux.toFixed(3)}</div></div>` +
+      `<div><div class="muted">load min / max</div><div class="big">${Math.min(...loads).toFixed(2)} / ${Math.max(...loads).toFixed(2)}</div></div>` +
+      `<div class="muted" style="align-self:end">1.00 = even</div>`;
   }
   document.getElementById('reroll').onclick = () => { seed = Math.floor(Math.random() * 1e6) + 1; reroll(); };
   document.getElementById('bias').oninput = render;
 
-  // ---------- section 4: balanced vs collapsed bars ----------
+  // ---------- T4: capacity ----------
+  const LOADS = [9, 3, 2, 2], CAPN = 5;
+  let dropless = false;
+  function capDraw() {
+    let dropped = 0, h = '';
+    LOADS.forEach((n, e) => {
+      let s = '';
+      for (let i = 0; i < n; i++) {
+        if (i === CAPN && !dropless) s += '<span class="slot capline"></span>';
+        const drop = !dropless && i >= CAPN; if (drop) dropped++;
+        s += `<span class="slot${drop ? ' drop' : ''}" style="background:var(${EC[e]})">${drop ? '✗' : ''}</span>`;
+      }
+      h += `<div class="caprow"><b style="color:var(${EC[e]})">E${e}</b><div class="slots">${s}</div><span class="muted">${n} tokens</span></div>`;
+    });
+    document.getElementById('capViz').innerHTML = h;
+    document.getElementById('capStat').innerHTML = dropless ? '<b style="color:var(--good)">0 dropped</b>' : `<b style="color:var(--bad)">${dropped} dropped</b>`;
+    document.getElementById('capBtn').classList.toggle('on', !dropless);
+    document.getElementById('dropBtn').classList.toggle('on', dropless);
+  }
+  document.getElementById('capBtn').onclick = () => { dropless = false; capDraw(); };
+  document.getElementById('dropBtn').onclick = () => { dropless = true; capDraw(); };
+
+  // ---------- T6: upcycling slices ----------
+  (function () {
+    const L = 'abcdefgh', HUE = ['--e0', '--e1', '--e2', '--e3', '--e0', '--e1', '--e2', '--e3'];
+    const sl = (c, isNew) => isNew ? '<span class="sl new">?</span>' : `<span class="sl" style="background:var(${HUE[L.indexOf(c)]})">${c}</span>`;
+    const ex = list => list.map(s => `<span>${s}</span>`).join('');
+    const row = (name, html) => `<div class="slrow"><b>${name}</b><div class="ex">${html}</div></div>`;
+    const copy = [0, 1, 2, 3].map(() => [...L].map(c => sl(c)).join(''));
+    const part = ['ab', 'cd', 'ef', 'gh'].map(p => [...p].map(c => sl(c)).join(''));
+    const drop = [0, 1, 2, 3].map(e => [...L].map((c, i) => sl(c, (i + e) % 2 === 1)).join(''));
+    document.getElementById('upViz').innerHTML =
+      row('dense FFN', [...L].map(c => sl(c)).join('')) + '<hr style="border:0;border-top:1px solid var(--line);margin:8px 0">' +
+      row('copy', ex(copy)) + row('partition', ex(part)) + row('drop', ex(drop)) +
+      '<p class="cap">Each group = one expert. <span class="sl new" style="width:16px;height:16px">?</span> = neuron redrawn at random.</p>';
+  })();
+
+  // ---------- L2: balanced vs collapsed bars ----------
   function balBars() {
     const g = document.getElementById('balbars'); g.innerHTML = '';
-    const sets = [[0.25, 0.25, 0.25, 0.25], [0.5, 0.25, 0.15, 0.10]];
-    sets.forEach((s, j) => {
+    [[0.25, 0.25, 0.25, 0.25], [0.5, 0.25, 0.15, 0.10]].forEach((s, j) => {
       const ox = j ? 290 : 30;
-      g.appendChild(el('line', { x1: ox, y1: 150, x2: ox + 200, y2: 150, stroke: css('--line') }));
+      g.appendChild(el('line', { x1: ox, y1: 150, x2: ox + 200, y2: 150, stroke: 'var(--line)' }));
       s.forEach((v, e) => {
         const hh = v * 220, x = ox + 10 + e * 48;
-        g.appendChild(el('rect', { x, y: 150 - hh, width: 34, height: hh, fill: css(EC[e]), rx: 3 }));
+        g.appendChild(el('rect', { x, y: 150 - hh, width: 34, height: hh, fill: `var(${EC[e]})`, rx: 3 }));
         g.appendChild(el('text', { x: x + 17, y: 150 - hh - 4, 'text-anchor': 'middle', 'font-size': 10 }, 'f=' + v));
-        g.appendChild(el('text', { x: x + 17, y: 164, 'text-anchor': 'middle', 'font-size': 11, 'font-weight': 700, fill: css(EC[e]) }, 'E' + e));
+        g.appendChild(el('text', { x: x + 17, y: 164, 'text-anchor': 'middle', 'font-size': 11, 'font-weight': 700, style: `fill:var(${EC[e]})` }, 'E' + e));
       });
     });
   }
 
-  // ---------- section 5: parameter bars ----------
-  function paramBars() {
-    const g = document.getElementById('pbars'); g.innerHTML = '';
-    const rows = [['Dense', 7.30, 12.39], ['MoE total', 7.31, 49.55], ['MoE active / token', 7.31, 24.78]];
-    const sc = 360 / 57, x0 = 140;
-    rows.forEach(([name, sh, ff], i) => {
-      const y = 22 + i * 62;
-      g.appendChild(el('text', { x: x0 - 10, y: y + 22, 'text-anchor': 'end', 'font-size': 13, 'font-weight': 600 }, name));
-      g.appendChild(el('rect', { x: x0, y, width: sh * sc, height: 34, fill: css('--dense'), rx: 4 }));
-      g.appendChild(el('rect', { x: x0 + sh * sc, y, width: ff * sc, height: 34, fill: css('--accent'), rx: 4 }));
-      g.appendChild(el('text', { x: x0 + (sh + ff) * sc + 8, y: y + 22, 'font-size': 13, 'font-weight': 700 }, (sh + ff).toFixed(1) + 'M'));
-    });
+  // ---------- L4: bias trick ----------
+  const SIG = [0.881, 0.622, 0.769, 0.426, 0.711, 0.858, 0.269, 0.525];
+  const ECOL = i => `var(${EC[i % 4]})`;
+  function biasDraw(on) {
+    const pickScore = SIG.map((s, i) => s + (on && i === 5 ? -0.5 : 0));
+    const top = pickScore.map((v, i) => [v, i]).sort((a, b) => b[0] - a[0]).slice(0, 2).map(x => x[1]);
+    const sum = top.reduce((a, i) => a + SIG[i], 0);
+    document.getElementById('biasViz').innerHTML = SIG.map((s, i) => {
+      const p = top.includes(i), shown = pickScore[i];
+      return `<div class="pbar ${p ? 'pick' : 'off'}"><b style="color:${ECOL(i)}">E${i}</b>` +
+        `<div class="track"><div class="fill" style="width:${shown * 100}%;background:${ECOL(i)}"></div></div>` +
+        `<span>${shown.toFixed(3)}${p ? ' ✓' : ''}</span></div>`;
+    }).join('');
+    document.getElementById('biasNote').innerHTML = `Picked: ${top.map(i => `E${i}`).join(' + ')} → weights ` +
+      top.map(i => `${(SIG[i] / sum).toFixed(2)}`).join(' / ') + ' <span class="muted">(from the original scores, bias ignored)</span>';
+    document.getElementById('biasOff').classList.toggle('on', !on);
+    document.getElementById('biasOn').classList.toggle('on', on);
   }
+  document.getElementById('biasOff').onclick = () => biasDraw(false);
+  document.getElementById('biasOn').onclick = () => biasDraw(true);
 
-  // ---------- step-through D: token loop vs expert loop ----------
+  // ---------- C3: token loop vs expert loop ----------
   const PICK = [{ 0: '0.65', 2: '0.35' }, { 3: '0.83', 1: '0.17' }, { 1: '0.71', 2: '0.29' }, { 3: '0.53', 0: '0.47' }];
-  const TOK_STEPS = [[0, 0], [0, 2], [1, 3], [1, 1], [2, 1], [2, 2], [3, 3], [3, 0]].map(p => [p]);   // (token, expert), in topi order
+  const TOK_STEPS = [[0, 0], [0, 2], [1, 3], [1, 1], [2, 1], [2, 2], [3, 3], [3, 0]].map(p => [p]);
   const EXP_STEPS = [0, 1, 2, 3].map(e => [0, 1, 2, 3].filter(t => PICK[t][e]).map(t => [t, e]));
   const term = (t, e) => `${PICK[t][e]}·<b style="color:var(--e${e})">E${e}</b>(x${t})`;
-  function loopViz(id, steps, head) {
+  function loopViz(id, steps) {
     const root = document.getElementById(id);
     root.innerHTML = `<div class="controls" style="margin-bottom:6px"><button data-a="reset">↺ Reset</button>` +
       `<button data-a="next">Next call ▶</button><button data-a="play">▶ Play</button>` +
@@ -1048,7 +946,7 @@ msg += f" | aux {aux_avg:.3f} load {load_min:.2f}-{load_max:.2f}"   # MoE</code>
         h += '</tr>';
       }
       root.querySelector('table').innerHTML = h;
-      root.querySelector('.cnt').innerHTML = `${head}: <b>${s}</b> / ${steps.length}`;
+      root.querySelector('.cnt').innerHTML = `expert calls: <b>${s}</b> / ${steps.length}`;
       if (!s) root.querySelector('.now').innerHTML = '<span class="muted">out = zeros. Press Next call.</span>';
       else {
         const e = act[0][1], xs = act.map(([t]) => 'x' + t).join(', ');
@@ -1078,16 +976,16 @@ msg += f" | aux {aux_avg:.3f} load {load_min:.2f}-{load_max:.2f}"   # MoE</code>
     };
     draw();
   }
-  loopViz('lvTok', TOK_STEPS, 'expert calls');
-  loopViz('lvExp', EXP_STEPS, 'expert calls');
+  loopViz('lvTok', TOK_STEPS);
+  loopViz('lvExp', EXP_STEPS);
 
-  // ---------- step-through E: building out[0] in 2D ----------
+  // ---------- C4: building out[0] in 2D ----------
   const VX = x => 40 + (x + 6) * 16, VY = y => 230 - y * 9.5;
   const ACC = [
     { out: [0, 0], note: 'Start with an empty row.' },
-    { out: [6.5, 13], note: "Expert 0's answer, scaled by 0.65, added to out[0]." },
-    { out: [5.1, 15.8], note: "Expert 2's share added on top. out[0] lands 35% of the way from E0 to E2, closer to the expert the router trusted more." },
-    { out: [-1.4, 2.8], bad: true, note: "What if the code assigned (=) instead of adding (+=)? Expert 0's share is lost. That's why it uses index_add_." },
+    { out: [6.5, 13], note: "Expert 0's answer × 0.65." },
+    { out: [5.1, 15.8], note: 'Expert 2 × 0.35 added on top. Lands 35% of the way from E0 to E2: closer to the expert trusted more.' },
+    { out: [-1.4, 2.8], bad: true, note: 'With = instead of +=, expert 0 is lost. That is why the code uses index_add_.' },
   ];
   let accS = 0;
   function arrow(svg, x1, y1, x2, y2, color) {
@@ -1113,8 +1011,7 @@ msg += f" | aux {aux_avg:.3f} load {load_min:.2f}-{load_max:.2f}"   # MoE</code>
     if (s === 3) arrow(svg, 0, 0, -1.4, 2.8, 'var(--bad)');
     const [ox, oy] = st.out, oc = st.bad ? 'var(--bad)' : 'var(--ink)';
     svg.appendChild(el('circle', { cx: VX(ox), cy: VY(oy), r: 4.5, fill: oc }));
-    svg.appendChild(el('text', { x: VX(ox) + 9, y: VY(oy) + 16, 'font-size': 12, 'font-weight': 700, style: `fill:${oc}` },
-      `out[0] = [${ox}, ${oy}]`));
+    svg.appendChild(el('text', { x: VX(ox) + 9, y: VY(oy) + 16, 'font-size': 12, 'font-weight': 700, style: `fill:${oc}` }, `out[0] = [${ox}, ${oy}]`));
     document.querySelectorAll('#accEqs div').forEach((d, i) => d.classList.toggle('on', i === s));
     document.getElementById('accNote').textContent = st.note;
     document.getElementById('accStep').textContent = `step ${s} / ${ACC.length - 1}`;
@@ -1124,7 +1021,7 @@ msg += f" | aux {aux_avg:.3f} load {load_min:.2f}-{load_max:.2f}"   # MoE</code>
   document.getElementById('accPrev').onclick = () => { accS = Math.max(0, accS - 1); accDraw(); };
   document.getElementById('accNext').onclick = () => { accS = Math.min(ACC.length - 1, accS + 1); accDraw(); };
 
-  // ---------- step-through F: the index_add_ line ----------
+  // ---------- C5: the index_add_ line ----------
   const mat = (rows, o = {}) => {
     const hl = o.hl || [], rl = o.rl || [];
     let h = '<table class="mat">';
@@ -1145,32 +1042,32 @@ msg += f" | aux {aux_avg:.3f} load {load_min:.2f}-{load_max:.2f}"   # MoE</code>
   const IX = [
     { on: ['nz'], title: 'Who picked expert 0?',
       html: mat(TOPI, { rl: TL, cl: SL, hl: [[0, 0], [3, 1]] }) + A() + '<div class="kv"><code>tok  = [0, 3]</code><code>slot = [0, 1]</code></div>',
-      note: 'Row of each match = which token. Column = which slot (1st or 2nd choice).' },
+      note: 'row of a match = token · column = slot' },
     { on: ['run'], title: 'Run expert 0 on just those rows',
       html: '<code>xf[[0, 3]]</code>' + A() + EN(0) + A() + mat(Y, { rl: ['t0', 't3'], cl: ['d0', 'd1'] }),
-      note: 'One call on a mini-batch of 2 tokens. y has shape (2, D).' },
-    { on: ['w'], title: "topw[tok, slot]: each token's weight for expert 0",
+      note: 'one call, mini-batch of 2 → y is (2, D)' },
+    { on: ['w'], title: 'topw[tok, slot]: their weights for expert 0',
       html: mat(TOPW, { rl: TL, cl: SL, hl: [[0, 0], [3, 1]] }) + A() + mat([['0.65', '0.47']]),
-      note: '(tok, slot) pairs are coordinates: (0, 0) and (3, 1).' },
-    { on: ['none'], title: 'None: turn the row into a column',
+      note: '(tok, slot) pairs are coordinates: (0, 0) and (3, 1)' },
+    { on: ['none'], title: 'None: row → column',
       html: mat([['0.65', '0.47']]) + A() + mat([['0.65'], ['0.47']]),
-      note: 'Shape (2,) → (2, 1), so it can multiply each row of y.' },
-    { on: ['dt'], title: '.to(y.dtype): match the number type',
+      note: '(2,) → (2, 1) so it multiplies each row of y' },
+    { on: ['dt'], title: '.to(y.dtype)',
       html: '<code>fp32</code>' + A() + '<code>y.dtype</code>',
-      note: 'Matters under bf16. Here everything is already fp32, so it does nothing.' },
-    { on: ['mul', 'w', 'none', 'dt'], title: 'Scale each answer by its weight',
+      note: 'matters under bf16; here all fp32, so a no-op' },
+    { on: ['mul', 'w', 'none', 'dt'], title: 'Scale each answer',
       html: mat(Y, { rl: ['t0', 't3'] }) + A('×') + mat([['0.65'], ['0.47']]) + A('=') + mat(YW, { rl: ['t0', 't3'] }),
-      note: 'Row 0 × 0.65, row 1 × 0.47.' },
-    { on: ['add'], title: 'index_add_: add each row into its token\'s row of out',
+      note: 'row 0 × 0.65 · row 1 × 0.47' },
+    { on: ['add'], title: 'index_add_: add rows into out',
       html: mat(YW, { rl: ['→ t0', '→ t3'] }) + A('+=') +
             mat([['6.5', '13.0'], ['0', '0'], ['0', '0'], ['2.82', '0.94']], { rl: TL, hl: [[0, 0], [0, 1], [3, 0], [3, 1]] }),
-      note: 'tok = [0, 3] says where each row goes. Rows t1 and t2 are untouched for now.' },
+      note: 'tok = [0, 3] says where each row goes · t1, t2 untouched for now' },
     { on: ['all'], title: 'Repeat for experts 1, 2, 3',
       html: '<table class="plain" style="width:auto">' +
             [['t0', 0, '0.65', 2, '0.35'], ['t1', 3, '0.83', 1, '0.17'], ['t2', 1, '0.71', 2, '0.29'], ['t3', 3, '0.53', 0, '0.47']]
               .map(([t, a, wa, b, wb]) => `<tr><td><code>out[${t}]</code></td><td>= ${wa}·${EN(a)}(x) + ${wb}·${EN(b)}(x)</td></tr>`).join('') +
             '</table>',
-      note: 'Every token ends with exactly 2 contributions: the same result as the token loop in D.' },
+      note: 'every token ends with exactly 2 contributions' },
   ];
   let ixS = 0;
   function ixDraw() {
@@ -1186,9 +1083,21 @@ msg += f" | aux {aux_avg:.3f} load {load_min:.2f}-{load_max:.2f}"   # MoE</code>
   document.getElementById('ixPrev').onclick = () => { ixS = Math.max(0, ixS - 1); ixDraw(); };
   document.getElementById('ixNext').onclick = () => { ixS = Math.min(IX.length - 1, ixS + 1); ixDraw(); };
 
-  function drawAll() { render(); balBars(); paramBars(); }
-  reroll(); balBars(); paramBars(); accDraw(); ixDraw();
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', drawAll);
+  // ---------- C7: parameter bars ----------
+  function paramBars() {
+    const g = document.getElementById('pbars'); g.innerHTML = '';
+    const rows = [['Dense', 7.30, 12.39], ['MoE total', 7.31, 49.55], ['MoE active', 7.31, 24.78]];
+    const sc = 330 / 57, x0 = 110;
+    rows.forEach(([name, sh, ff], i) => {
+      const y = 22 + i * 60;
+      g.appendChild(el('text', { x: x0 - 10, y: y + 22, 'text-anchor': 'end', 'font-size': 13, 'font-weight': 600 }, name));
+      g.appendChild(el('rect', { x: x0, y, width: sh * sc, height: 34, fill: 'var(--dense)', rx: 4 }));
+      g.appendChild(el('rect', { x: x0 + sh * sc, y, width: ff * sc, height: 34, fill: 'var(--accent)', rx: 4 }));
+      g.appendChild(el('text', { x: x0 + (sh + ff) * sc + 8, y: y + 22, 'font-size': 13, 'font-weight': 700 }, (sh + ff).toFixed(1) + 'M'));
+    });
+  }
+
+  reroll(); capDraw(); balBars(); biasDraw(false); accDraw(); ixDraw(); paramBars();
 </script>
 </body>
 </html>
